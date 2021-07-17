@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[빅데이터] 2장_빅데이터를 위한 데이터 모델 - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="마스터 데이터 집합은 람다 아키텍처에서 반드시 오염으로부터 보호되어야하는 유일한 영역이다.  2.1 데이터의 속성 대규모 소셜 네트워크 (페이스스페이스) 를 설계한다고 하자. 각각의 정보 계층은 바로 앞 단계로부터 파생되지만 단방향성이다.앞으로 사용하게 될 용어들을 정리한다.  정보 : 지식의 일반적인 모음 데이터 : 어떤 것으로부터 파싱되지 않은 정보 질"><meta property="og:type" content="blog"><meta property="og:title" content="[빅데이터] 2장_빅데이터를 위한 데이터 모델"><meta property="og:url" content="https://junhee-ko.github.io/2020/02/25/bigdata-chapter-02/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="마스터 데이터 집합은 람다 아키텍처에서 반드시 오염으로부터 보호되어야하는 유일한 영역이다.  2.1 데이터의 속성 대규모 소셜 네트워크 (페이스스페이스) 를 설계한다고 하자. 각각의 정보 계층은 바로 앞 단계로부터 파생되지만 단방향성이다.앞으로 사용하게 될 용어들을 정리한다.  정보 : 지식의 일반적인 모음 데이터 : 어떤 것으로부터 파싱되지 않은 정보 질"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_01.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_02.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_03.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_04.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_05.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_06.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_07.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_08.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_c02_09.png"><meta property="article:published_time" content="2020-02-24T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.859Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/bigdata_c02_01.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2020/02/25/bigdata-chapter-02/"},"headline":"[빅데이터] 2장_빅데이터를 위한 데이터 모델","image":["https://junhee-ko.github.io/image/bigdata_c02_01.png","https://junhee-ko.github.io/image/bigdata_c02_02.png","https://junhee-ko.github.io/image/bigdata_c02_03.png","https://junhee-ko.github.io/image/bigdata_c02_04.png","https://junhee-ko.github.io/image/bigdata_c02_05.png","https://junhee-ko.github.io/image/bigdata_c02_06.png","https://junhee-ko.github.io/image/bigdata_c02_07.png","https://junhee-ko.github.io/image/bigdata_c02_08.png","https://junhee-ko.github.io/image/bigdata_c02_09.png"],"datePublished":"2020-02-24T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.859Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"마스터 데이터 집합은 람다 아키텍처에서 반드시 오염으로부터 보호되어야하는 유일한 영역이다.  2.1 데이터의 속성 대규모 소셜 네트워크 (페이스스페이스) 를 설계한다고 하자. 각각의 정보 계층은 바로 앞 단계로부터 파생되지만 단방향성이다.앞으로 사용하게 될 용어들을 정리한다.  정보 : 지식의 일반적인 모음 데이터 : 어떤 것으로부터 파싱되지 않은 정보 질"}</script><link rel="canonical" href="https://junhee-ko.github.io/2020/02/25/bigdata-chapter-02/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-02-24T15:00:00.000Z" title="2/25/2020, 12:00:00 AM">2020-02-25</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.859Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/big-data/">Big Data</a></span></div></div><h1 class="title is-3 is-size-4-mobile">[빅데이터] 2장_빅데이터를 위한 데이터 모델</h1><div class="content"><p>마스터 데이터 집합은 람다 아키텍처에서 반드시 오염으로부터 보호되어야하는 유일한 영역이다.</p>
+<p><img src="/image/bigdata_c02_01.png"></p>
+<h4 id="2-1-데이터의-속성"><a href="#2-1-데이터의-속성" class="headerlink" title="2.1 데이터의 속성"></a>2.1 데이터의 속성</h4><p><img src="/image/bigdata_c02_02.png"></p>
+<p>대규모 소셜 네트워크 (페이스스페이스) 를 설계한다고 하자. 각각의 정보 계층은 바로 앞 단계로부터 파생되지만 단방향성이다.<br>앞으로 사용하게 될 용어들을 정리한다.</p>
+<ol>
+<li>정보 : 지식의 일반적인 모음</li>
+<li>데이터 : 어떤 것으로부터 파싱되지 않은 정보</li>
+<li>질의 : 데이터에 물어볼 수 있는 질문</li>
+<li>뷰 :  특정 타입의 질의에 응답하는데 도움을 주기 위해 만들어 지는 것</li>
+</ol>
+<p><img src="/image/bigdata_c02_03.png"></p>
+<p>어떤 사람의 데이터는 또 다른 사람의 뷰각 될 수 있다. 어떤 광고 회사가 페이스스페이스 사용자 프로필로부터 인구 통계학 정보를 긁어 가는 수집기를 만들었다. 톰의 출생월일은 생년월일로부터 도출될 수 있기 때문에 페이스스페이스에게는 뷰 이지만, 광고 회사 입장에서는 톰에 대한 제한된 정보를 가지는 것으로 시작하므로 데이터이다.<br>데이터의 핵심 속성을 살펴보자 : 원시성 / 불변성 / 영원성</p>
+<h5 id="2-1-1-데이터는-원시적이다"><a href="#2-1-1-데이터는-원시적이다" class="headerlink" title="2.1.1 데이터는 원시적이다"></a>2.1.1 데이터는 원시적이다</h5><p>가공되지 않은 데이터일수록 더 많은 질문을 그 데이터에 대해 던질 수 있다.</p>
+<h5 id="2-1-2-데이터는-불변이다"><a href="#2-1-2-데이터는-불변이다" class="headerlink" title="2.1.2 데이터는 불변이다."></a>2.1.2 데이터는 불변이다.</h5><p>관계형 데이터메이스 갱신은 없어서는 안 될 연산이다. 그러나 불변성을 다루기 위해서는 데이터를 갱신하거나 삭제하면 안되고 추가만 해야한다. 빅데이터 시스템에서 불변 스키마를 사용하면 다음 두 가지 이점이 있다.</p>
+<ol>
+<li><p>인적 내결함성<br>실수로 인해 데이터가 손실되지 않는다. 잘못된 데이터가 쓰여도 이전에 있던 데이터는 그대로 남는다.</p>
+</li>
+<li><p>단순성<br>마스터 데이터 집함에 새 데이터를 추가할 수 있으면 된다. 데이터에 대한 색인이 필요하지 않아 단순하다.</p>
+</li>
+</ol>
+<p>데이터의 불변성을 유지하는 것의 장점은 가변 스키마와 비교하면 명확하다.</p>
+<p><img src="/image/bigdata_c02_04.png"></p>
+<p>톰이 LA 로 이사했다. 그러면 톰의 현재 주거지를 반영하기 위해 갱신을 해야하는데, 톰이 샌프란시스코에 살았다는 지식은 완전히 손실된다.<br>불변 스키마를 사용하면 상황이 다르다. 사용자 정보가 바뀔 때마다 독립된 레코드를 생성한다. 이렇게 하려면 두 가지를 바꿔야한다.</p>
+<ol>
+<li>사용자 정보의 각 항목을 독립된 레코드에 저장한다.</li>
+<li>각 데이터 단위에 그 정보가 알려진 시간을 붙인다.</li>
+</ol>
+<p><img src="/image/bigdata_c02_05.png"></p>
+<p>톰이 새 주거지로 이사를 하면, 주거지 테이블에 새 래코드를 추가한다. 이제 톰의 주거지를 저장하는 레코드가 두 개가 된다. 관련된 모든 주거지 정보를 훑으면서 타임스태프가 가장 최신인 것을 골라내, 현재 주거지를 알 수 있다.<br>불변 방식을 사용하는 방법으로 감당해야하는 것은 가변 스키마보다 공간을 많이 사용한다는 것이다. 사용자 ID 는 가변 방식에서처럼 로우마다 한 번 나오는게 아니라 모든 속성에 나온다. 게다가 현재 상태 뿐만 아니라 이벤트 기록을 전부 저장한다.<br>하지만, 빅데이터 기술을 통해 막대한 데이터의 저장 능력을 이용해서 불변성의 헤택을 끌어내야한다. 마스터 데이터 집합을 구축하는 일은 정말 중요하다.</p>
+<h5 id="2-1-3-데이터는-영원히-참이다"><a href="#2-1-3-데이터는-영원히-참이다" class="headerlink" title="2.1.3 데이터는 영원히 참이다."></a>2.1.3 데이터는 영원히 참이다.</h5><p>데이터의 불변성으로 인해 만들어지는 중요한 결과는, 데이터가 영원히 참이 된다는 것이다.</p>
+<h4 id="2-2-데이터-표현을-위한-팩트-기반-모델"><a href="#2-2-데이터-표현을-위한-팩트-기반-모델" class="headerlink" title="2.2 데이터 표현을 위한 팩트 기반 모델"></a>2.2 데이터 표현을 위한 팩트 기반 모델</h4><p>마스터 데이터 집합 안에서 데이터를 표현하는 방법은 여러가지다. </p>
+<ol>
+<li>전통적인 관계형 데이터베이스의 테이블</li>
+<li>구조화된 XML</li>
+<li>반구조화된 JSON</li>
+<li>팩트 기반 모델 (fact-based model) : 데이터를 fact 라고 불리는 기본 단위로 분해</li>
+</ol>
+<h5 id="2-2-1-팩트의-예와-속성"><a href="#2-2-1-팩트의-예와-속성" class="headerlink" title="2.2.1 팩트의 예와 속성"></a>2.2.1 팩트의 예와 속성</h5><p><img src="/image/bigdata_c02_06.png"></p>
+<p>팩트 기반 모델은,</p>
+<ol>
+<li>원시 데이터를 원자적인 팩트로 저장한다.</li>
+<li>타임스탬프로 인해 팩트는 불변성을 지니며 영원히 참이다.</li>
+<li>질의 처리 과정 중에 중복 식별이 가능하도록 각 팩트의 식별 가능성을 보장한다.</li>
+</ol>
+<p>팩트는 유일하게 식별할 수 있는 데이터와 연관되어야한다. 페이스스페이스에 페이지뷰에 대한 데이터를 저장하는 경우를 생각해보자. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct PageView:</span><br><span class="line">	DateTime timestamp</span><br><span class="line">	String url</span><br><span class="line">	String ip_address</span><br></pre></td></tr></table></figure>
+
+<p>이 구조체를 사용한 팩트는 특정한 페이지뷰 이벤트로 유일하게 식별되지 않는다. 동일한 IP 주소에서 동일한 URL 에 대한 여러개의 페이지뷰가 동시에 발생하면, 이 때 생겨난 각각의 페이지뷰는 정확히 같은 데이터 레코드이다.<br>서로 다른 페이지뷰를 구분하기 위해 스키마에 nonce (임시값), 각 페이지뷰마다 난수 생성법을 써서 만든 64 비트 숫자를 추가해보자.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct PageView:</span><br><span class="line">	DateTime timestamp</span><br><span class="line">	String url</span><br><span class="line">	String ip_address</span><br><span class="line">	Long nonce</span><br></pre></td></tr></table></figure>
+
+<p>임시값을 추가하면 페이지뷰 이벤트를 서로 구별할 수 있고, 두 개의 페이지뷰 데이터 단위가 동일하면 이벤트도 동일하다는 것을 알 수 있다.</p>
+<h5 id="2-2-2-팩트-기반-모델이-주는-혜택"><a href="#2-2-2-팩트-기반-모델이-주는-혜택" class="headerlink" title="2.2.2 팩트 기반 모델이 주는 혜택"></a>2.2.2 팩트 기반 모델이 주는 혜택</h5><ol>
+<li><p>과거의 어느 시점에 대한 질의도 받을 수 있다.<br>팩트에 타임스탬프가 붙어있고 불변성을 지녀 생기는 결과이다.</p>
+</li>
+<li><p>사람의 실수에 대해 내성을 가진다.<br>톰이 샌프란시스코에서 로스앤잴래스로 이사한 것을 실수로 저장했다. 톰이 로스엔제렐스에 산다는 팩트를 지우면, 톰의 주거지가 자동으로 이전의 것으로 재설정된다.</p>
+</li>
+<li><p>부분 정보를 처리할 수 있다.<br>톰이 나이와 성별은 입력했지만 주거지나 직업은 입력하지 않으면, 데이터 집합은 알려진 정보에 대한 팩트만 보관한다. 팩트가 존재하지 않는다는 것은, 논리적으로 null 과 동일하다. </p>
+</li>
+<li><p>데이터 저장소의 질의 처리 계층이 분리된다.<br>batch layer 와 serving layer 모두에 정보가 저장되기 때문에 데이터가 정규화된 형태와 비정규화된 형태로 있게 되고, 양쪽의 모든 장점을 뽑을 수 있다.</p>
+</li>
+</ol>
+<p>데이터 정규화를 다루는 관계형 테이블 예를 보자. 관계형 테이블을 사용할 때는 질의 효율성과 데이터 일관성 중 어떤 것이 중요하냐에 따라 정규화 스키마와 비정규화 스키마 중 하나를 선택한다.</p>
+<p><img src="/image/bigdata_c02_07.png"></p>
+<ol>
+<li><p>비정규화된 스키마<br>동일한 이름이 여러 로우에 저장 될 수 있다. 이것은 각 회사의 직원수를 빨리 알아 낼 수 있도록 하지만, 회사가 이름을 바꾸면 많은 로우를 갱신해야한다. 정보를 여러 위치에 저장하는 것은 일관성이 깨질 위험이 있다.</p>
+</li>
+<li><p>정규화된 스키마<br>오직 하나의 위치에만 저장된다. 일관성이 깨질 위험은 없지만, 질의에 응답하려면 테이블을 조인해야하고 계산 비용이 커질 수 있다.</p>
+</li>
+</ol>
+<p>람다 아키텍쳐에서는 질의 처리와 데이터 저장 목적이 분리되어 있다. </p>
+<p><img src="/image/bigdata_c02_08.png"></p>
+<ol>
+<li><p>마스터 데이터 집합<br>완전히 정규화되어 있다. 어떤 데이터도 중복 되지 않는다. 현재 타임스템프를 붙여 새 팩트를 추가하면 과거 팩트는 무효화되어 갱신이 쉽다.</p>
+</li>
+<li><p>일괄처리 뷰<br>데이터 집합의 데이터 하나가 여러 뷰로 생성될수 있다는 점에서 비정규화된 테이블과 같다. 큰 차이는, 일괄 처리 뷰는 마스터 데이터 집합에 대한 함수로 정의된다는 것이다. 마스터 데이터 집합으로부터 계속 재생성 되므로 일괄 처리 뷰를 갱신할 필요가 없다.</p>
+</li>
+</ol>
+<h4 id="2-3-그래프-스키마"><a href="#2-3-그래프-스키마" class="headerlink" title="2.3 그래프 스키마"></a>2.3 그래프 스키마</h4><p>팩트 그 자체만으로는, 데이터 집합에 저장된 팩트의 형식에 대한 기술도 없고, 그들 사이의 관계에 대한 설명도 없다. 그래서, 그래프 스키마가 필요하다.</p>
+<h5 id="2-3-1-그래프-스키마의-요소"><a href="#2-3-1-그래프-스키마의-요소" class="headerlink" title="2.3.1 그래프 스키마의 요소"></a>2.3.1 그래프 스키마의 요소</h5><p>세 가지 핵심 요소는, </p>
+<ol>
+<li>노드 : 시스템 내의 개체</li>
+<li>간선 : 노드 사이의 관계</li>
+<li>속성 : 개체에 대한 정보</li>
+</ol>
+<p><img src="/image/bigdata_c02_09.png"></p>
+<h5 id="2-3-2-강제-기능-스키마는-왜-필요한가"><a href="#2-3-2-강제-기능-스키마는-왜-필요한가" class="headerlink" title="2.3.2 강제 기능 스키마는 왜 필요한가"></a>2.3.2 강제 기능 스키마는 왜 필요한가</h5><p>팩트를 저장할 때 어떤 형식으로 저장해야할까.  JSON 처럼, 반구조화된 텍스트 형식을 사용한다고 하자. 실질적으로 어떤 것도 마스터 데이터 집합에 기록할 수 있어서 단순하고 유연하다. 하지만 문제가 있다.<br>톰의 나이를 JSON 으로 나타내면,</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;id&quot; : 3, &quot;field&quot; : &quot;age&quot;, &quot;value&quot; : 29, &quot;timestamp&quot; : 133589484&#125;</span><br></pre></td></tr></table></figure>
+
+<p>사람의 실수로 데이터 집합에 아래와 같은 팩트가 들어 갈 수 있다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;id&quot; : 3, &quot;field&quot; : &quot;age&quot;, &quot;value&quot; : 29&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JSON 자체는 유효하지만, 형식의 일관성을 지키지 못했고 데이터도 누락되었다. 텍스트 형식으로는 이 부분을 강제할 수 없다.<br>대안으로, 팩트의 구조를 엄격히 정의하는 강제 기능 스키마를 사용하면 된다. 처음에는 해줄게 많지만, 필요한 필드가 모두 존재하고 모든 값이 기대한 형식에 맞게 한다는 조건이 보장된다. 중요한 것은, 데이터 생성 중에 실수가 있을 때 강제 기능 스키마가 바로 그 시점에 오류를 낸다.</p>
+<hr>
+<p>빅데이터, 람다 아키텍처로 알아보는 실시간 빅데이터 구축의 핵심 원리와 기법 &lt;네이선 마츠, 제임스 워렌&gt;</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[빅데이터] 2장_빅데이터를 위한 데이터 모델</p><p><a href="https://junhee-ko.github.io/2020/02/25/bigdata-chapter-02/">https://junhee-ko.github.io/2020/02/25/bigdata-chapter-02/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2020-02-25</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/03/02/tdd-chapter-06/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[테스트 주도 개발] 6장_돌아온 모두를 위한 평등</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/02/25/bigdata-chapter-01/"><span class="level-item">[빅데이터] 1장_빅데이터를 위한 새로운 패러다임</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

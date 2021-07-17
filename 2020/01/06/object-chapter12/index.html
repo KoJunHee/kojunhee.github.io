@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[오브젝트] 12장_다형성 - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="상속의 진정한 목적은 코드 재사용이 아니라 다형성을 위한 서브타입 계층을 구축 하는 것이다. 상속의 관점에서 다형성이 구현되는 기술적인 메커니즘을 정리한다. 01 다형성다형성(Polymorphism) 은 다음 둘의 합성어이다. 즉, 많은 형태를 가질 수 있는 능력이다.  ploy : 많은 morph : 형태  다형성은 다음과 같이 분류될 수 있다. 이번장은"><meta property="og:type" content="blog"><meta property="og:title" content="[오브젝트] 12장_다형성"><meta property="og:url" content="https://junhee-ko.github.io/2020/01/06/object-chapter12/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="상속의 진정한 목적은 코드 재사용이 아니라 다형성을 위한 서브타입 계층을 구축 하는 것이다. 상속의 관점에서 다형성이 구현되는 기술적인 메커니즘을 정리한다. 01 다형성다형성(Polymorphism) 은 다음 둘의 합성어이다. 즉, 많은 형태를 가질 수 있는 능력이다.  ploy : 많은 morph : 형태  다형성은 다음과 같이 분류될 수 있다. 이번장은"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_upcasting.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_self.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_overriding.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_grade_lecture.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_overloading.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_self_send.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_super.png"><meta property="og:image" content="https://junhee-ko.github.io/image/object_polymorphism_same_self.png"><meta property="article:published_time" content="2020-01-05T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.858Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/object_polymorphism_upcasting.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2020/01/06/object-chapter12/"},"headline":"[오브젝트] 12장_다형성","image":["https://junhee-ko.github.io/image/object_polymorphism_upcasting.png","https://junhee-ko.github.io/image/object_polymorphism_self.png","https://junhee-ko.github.io/image/object_polymorphism_overriding.png","https://junhee-ko.github.io/image/object_polymorphism_grade_lecture.png","https://junhee-ko.github.io/image/object_polymorphism_overloading.png","https://junhee-ko.github.io/image/object_polymorphism_self_send.png","https://junhee-ko.github.io/image/object_polymorphism_super.png","https://junhee-ko.github.io/image/object_polymorphism_same_self.png"],"datePublished":"2020-01-05T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.858Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"상속의 진정한 목적은 코드 재사용이 아니라 다형성을 위한 서브타입 계층을 구축 하는 것이다. 상속의 관점에서 다형성이 구현되는 기술적인 메커니즘을 정리한다. 01 다형성다형성(Polymorphism) 은 다음 둘의 합성어이다. 즉, 많은 형태를 가질 수 있는 능력이다.  ploy : 많은 morph : 형태  다형성은 다음과 같이 분류될 수 있다. 이번장은"}</script><link rel="canonical" href="https://junhee-ko.github.io/2020/01/06/object-chapter12/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-01-05T15:00:00.000Z" title="1/6/2020, 12:00:00 AM">2020-01-06</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.858Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/oop/">OOP</a></span></div></div><h1 class="title is-3 is-size-4-mobile">[오브젝트] 12장_다형성</h1><div class="content"><p>상속의 진정한 목적은 코드 재사용이 아니라 <code>다형성을 위한 서브타입 계층을 구축</code> 하는 것이다.</p>
+<p>상속의 관점에서 다형성이 구현되는 기술적인 메커니즘을 정리한다.</p>
+<h2 id="01-다형성"><a href="#01-다형성" class="headerlink" title="01 다형성"></a>01 다형성</h2><p>다형성(Polymorphism) 은 다음 둘의 합성어이다. 즉, 많은 형태를 가질 수 있는 능력이다.</p>
+<ul>
+<li>ploy : 많은</li>
+<li>morph : 형태</li>
+</ul>
+<p>다형성은 다음과 같이 분류될 수 있다. 이번장은 포함 다형성에 대해 다룬다.</p>
+<ul>
+<li><p>유니버셜 다형성 </p>
+<ul>
+<li><p>매개변수 다형성 </p>
+<p>클래스의 인스턴스 변수나 메서드의 매개변수 타입을 임의의 타입으로 선언한 후 사용하는 시점에 구체적인 타입으로 지정하는 방식.</p>
+<p> ex) List 인터페이스는 컬렉션에 보관할 요소의 타입을 임의의 타입 T로 지정하고 있으며 실제 인스턴스를 생성하는 시점에 T 를 구체적인 타입으로 지정</p>
+</li>
+<li><p>포함 다형성 (서브타입 다형성)</p>
+<p>메세지가 동일해도 수신한 객체의 타입에 따라 실제로 수행되는 행동이 달라지는 능력.</p>
+</li>
+</ul>
+</li>
+<li><p>임시 다형성</p>
+<ul>
+<li><p>오버로딩 다형성</p>
+<p>하나의 클래스 안에 동일한 이름의 메서드가 존재하는 경우.</p>
+</li>
+<li><p>강제 다형성</p>
+<p>자동적인 타입 변환이나 사용자가 직접 구현한 타입 변환을 이용해 동일한 연산자를 다양한 타입에 사용할수 있는 방식.</p>
+<p>ex) 이항 연산자인 ‘+’ 는 피연산자가 하나는 정수형이고 다른 하나는 문자열인 경우, 정수형 피연산자는 문자열 타입으로 강제 형변환</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="02-상속의-양면성"><a href="#02-상속의-양면성" class="headerlink" title="02 상속의 양면성"></a>02 상속의 양면성</h2><ol>
+<li><p>데이터 관점의 상속</p>
+<p>부모 클래스에서 정의한 모든 데이터를 자식 클래스의 인스턴스에 자동으로 포함한다.</p>
+</li>
+<li><p>행동 관점의 상속</p>
+<p>데이터뿐만 아니라 부모 클래스에서 정의한 일부 메서드 역시 자동으로 자식 클래스에 포함한다.</p>
+<p>외부의 객체가 부모 클래스의 인스턴스에 전송할 수 있는 모든 메세지는 자식 클래스의 인스턴스에도 전송할 수 있다.</p>
+</li>
+</ol>
+<h5 id="상속을-사용한-강의-평가"><a href="#상속을-사용한-강의-평가" class="headerlink" title="상속을 사용한 강의 평가"></a>상속을 사용한 강의 평가</h5><p>code : 394 p</p>
+<ol>
+<li><p>메서드 오버라이딩</p>
+<p>자식 클래스 안에 상속 받은 메서드와 <code>동일한 시그니처의 메서드를 재정의</code>해서 부모 클래스의 구현을 새로운 구현으로 대체하는 것이다.</p>
+</li>
+<li><p>메서드 오버로딩</p>
+<p>부모 클래스에서 정의한 <code>메서드와 이름은 동일하지만 시그니처는 다른</code> 메서드를 자식 클래스에 추가하는 것이다.</p>
+</li>
+</ol>
+<h2 id="03-업캐스팅과-동적-바인딩"><a href="#03-업캐스팅과-동적-바인딩" class="headerlink" title="03 업캐스팅과 동적 바인딩"></a>03 업캐스팅과 동적 바인딩</h2><h5 id="같은-메세지-다른-메서드"><a href="#같은-메세지-다른-메서드" class="headerlink" title="같은 메세지, 다른 메서드"></a>같은 메세지, 다른 메서드</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Professor professor01 = <span class="keyword">new</span> Professor(<span class="string">&quot;다익스트라&quot;</span>, <span class="keyword">new</span> Lecture(...))</span><br><span class="line">Professor professor02 = <span class="keyword">new</span> Professor(<span class="string">&quot;다익스트라&quot;</span>, <span class="keyword">new</span> GradeLecture(...))</span><br><span class="line">  </span><br><span class="line">professor01.compileStatistics();</span><br><span class="line">professor02.compileStatistics();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">compileStatistics</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">	lecture.evalulate();</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>동일한 객체 참조인 lecture 에 대해 동일한 evaluate 메세지를 전송하는 동일한 코드 안에서, 서로 다른 클래스 안에 구현된 메서드를 실행할 수 있다.</p>
+<p>이처럼, 코드 안에서 선언된 참조 타입과 무관하게 <code>실제로 메세지를 수신한 객체의 타입에 따라 실행되는 메서드가 달라질 수 있는 것</code>은 다음 두 메커니즘이 작용하기 때문이다.</p>
+<ol>
+<li><p>업캐스팅</p>
+<p>부모 클래스 타입으로 선언된 변수에 자식 클래스의 인스턴스를 할당하는 것이 가능</p>
+</li>
+<li><p>동적 바인딩</p>
+<p>메세지를 처리할 적절한 메서드를 컴파일 시점이 아니라 실행시점에 결정</p>
+</li>
+</ol>
+<h5 id="업캐스팅"><a href="#업캐스팅" class="headerlink" title="업캐스팅"></a>업캐스팅</h5><p><img src="/image/object_polymorphism_upcasting.png"></p>
+<p>업캐스팅의 대표적인 두 가지이다.</p>
+<ol>
+<li><p>대입문</p>
+<p>명시적으로 타입을 변환하지 않고도 부모 클래스의 타입의 참조변수에 자식 클래스의 인스턴스를 대입할 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Lecture lecture = <span class="keyword">new</span> GradeLecture(...);</span><br></pre></td></tr></table></figure></li>
+<li><p>메서드 파라미터</p>
+<p>부모 클래스의 타입으로 선언된 파라미터에 자식 클래스의 인스턴스를 전달할 수 잇다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Professor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Professor</span><span class="params">(String name, Lecture lecture)</span></span>&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Professor professor = <span class="keyword">new</span> Professor(<span class="string">&quot;다익스트라&quot;</span>, <span class="keyword">new</span> GradeLecture(...));</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>다운 캐스팅은, 부모 클래스의 인스턴스를 자식 클래스 타입으로 변환하기 위해 명시적인 타입 캐스팅이 필요하다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Lecture lecture = <span class="keyword">new</span> GradeLecture(...);</span><br><span class="line">GradeLecture gradeLecture = (GradeLecture) lecture;</span><br></pre></td></tr></table></figure>
+
+<h5 id="동적-바인딩"><a href="#동적-바인딩" class="headerlink" title="동적 바인딩"></a>동적 바인딩</h5><ol>
+<li><p>정적 바인딩</p>
+<p>컴파일 타임에 호출할 함수를 결정하는 방식</p>
+</li>
+<li><p>동적 바인딩</p>
+<p>실행될 메서드를 런타임에 결정하는 방식. </p>
+<p>실행 시점에 어떤 클래스의 인스턴스를 생성해서 전달하는지 알아야만 실제로 실행될 메서드를 알 수 있다.</p>
+</li>
+</ol>
+<h2 id="04-동적-메서드-탐색과-다형성"><a href="#04-동적-메서드-탐색과-다형성" class="headerlink" title="04 동적 메서드 탐색과 다형성"></a>04 동적 메서드 탐색과 다형성</h2><p>객체지향 시스템은 다음 규칙에 따라 실행할 메서드를 선택한다.</p>
+<ol>
+<li><p>메세지를 수신한 객체는 자신을 생성한 클래스에 적합한 메서드가 존재하는지 검사한다.</p>
+<p>존재하면 메서드를 실행하고 탐색을 종료한다.</p>
+</li>
+<li><p>존재하지 않으면, 부모 클래스에서 메서드 탐색을 계속한다.</p>
+<p>적합한 메서드를 찾을 때 까지 상속 계층을 따라 올라가며 계속된다.</p>
+</li>
+<li><p>상속 계층의 최상위 클르스에 올라갔지만 메서드를 발견하지 못하면 예외를 발생시키며 탐색을 종료한다.</p>
+</li>
+</ol>
+<p>여기서 중요한 것이 sefl 참조 변수이다.</p>
+<p>객체가 메세지를 수신하면, 컴파일러는 self 참조라는 임시 변수를 자동으로 생성해 메세지를 수신한 객체를 가리키도록 한다.</p>
+<p><img src="/image/object_polymorphism_self.png"></p>
+<p>위 그림에서, </p>
+<ol>
+<li>GradeLecture 클래스에서 적절한 메서드를 찾지 못했다면 </li>
+<li>parent 참조를 따라 부모 클래스인 Lecture 클래스로 이동한후 탐색을 계속한다. </li>
+<li>상속 계층을 따라 최상위 클래스인 Object 클래스에 이를 때 까지 탐색을 계속한다.  </li>
+<li>최상위 클래스에서도 메서드를 찾지 못하면 에러를 발생시킨다.</li>
+</ol>
+<p>동적 메서드 탐색은 두 원리로 구성된다.</p>
+<ol>
+<li><p>자동적인 메세지 위임</p>
+<p>자식 클래스는 이해할 수 없는 메세지를 전송 받으면 상속 계층을 따라 부모 클래스에 처리를 위임한다.</p>
+</li>
+<li><p>동적인 문맥</p>
+<p>메세지를 수신했을 때, 실제로 어떤 메서드가 실행될지 결정하는 것은 컴파일 시점이 아니라 실행시점에 이뤄진다.</p>
+</li>
+</ol>
+<h5 id="자동적인-메세지-위임"><a href="#자동적인-메세지-위임" class="headerlink" title="자동적인 메세지 위임"></a>자동적인 메세지 위임</h5><ol>
+<li><p>메서드 오버라이딩 : 자식 클래스의 메서드가 부모 클래스의 메서드를 감추게 된다.</p>
+<p><img src="/image/object_polymorphism_overriding.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Lecture lecture = <span class="keyword">new</span> Lecture(...);</span><br><span class="line">lecture.evaluate();</span><br></pre></td></tr></table></figure>
+
+<p>위 그림과 위 코드에서, 메서드 탐색은 self 참조가 가리키는 객체의 클래스인 Lecuture 에서 시작한다.</p>
+<p>Lecture 클래스 안에 evaluate 메서드가 존재하기 때문에, 메서드 실행한 후 탐색은 종료한다.</p>
+<p><img src="/image/object_polymorphism_grade_lecture.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Lecture lecture = <span class="keyword">new</span> GradeLecture(...);</span><br><span class="line">lecture.evaluate();</span><br></pre></td></tr></table></figure>
+
+<p>위 그림과 위 코드에서, Lecture 에 정의된 메서드가 아닌 실제 객체를 생성항 클래스인 GradeLecture 에 정의된 메서드가 실행된다. </p>
+<p>self 참조가 가리키는 객체의 클래스인 GradeLecture 에서 탐색을 시작하고 GradeLecture 클래스 안에  evaluate 메서드가 구현되어 있기 때문이다.</p>
+</li>
+<li><p>메서드 오버로딩 :  자식 클래스의 메서드와 부모 클래스의 메서드가 공존한다.</p>
+<p><img src="/image/object_polymorphism_overloading.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Lecture lecture = <span class="keyword">new</span> GradeLecture(...);</span><br><span class="line">lecture.average();</span><br></pre></td></tr></table></figure>
+
+<p>위 그림과 위 코드에서, GradeLecture 클래스 안에서 메세지에 응답할 수 있는 적절한 메서드를 찾지 못한다.</p>
+<p>그래서, 부모 클래스인 Lecture 클래스에서 메서드를 찾으려고 시도한다.</p>
+</li>
+</ol>
+<h5 id="동적인-문맥"><a href="#동적인-문맥" class="headerlink" title="동적인 문맥"></a>동적인 문맥</h5><p>메세지를 수신한 객체가 무엇이냐에 따라 메서드 탐색을 위한 문맥이 동적으로 바뀐다. </p>
+<p>이 동적인 문맥을 결정하는 것이 메세지를 수신한 객체를 가리키는 self 참조이다.</p>
+<p>self 참조 가 동적 문맥을 결정한다는 것은, 종종 어떤 메서드가 실행될지 예상하기 어렵게 만든다. 대표적인 경우가 self 전송이다.</p>
+<p>self 전송은 자식 클래스에서 부모 클래스 방향으로 진행되는 동적 메서드 탐색 경로를 <code>다시 self 참조가 가리키는 원래의 자식 클래스로 이동</code>시킨다. </p>
+<p>다음을 보자.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Lecture</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">stats</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getEvaluationMethod();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getEvaluationMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Pass or Fail&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GradeLecture</span> <span class="keyword">extends</span> <span class="title">Lecture</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getEvaluationMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Grade&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GradeLecture 에 stats 메시지를 전송하면, 다음 그림과 같다.</p>
+<p><img src="/image/object_polymorphism_self_send.png"></p>
+<ol>
+<li>self 참조는 GradeLecture 인스턴스를 가리키도록 설정되고 탐색은 GradeLecture 부터 시작.</li>
+<li>GradeLecture 클래스에는 stats 메세지를 처리할 메서드가 없기 때문에 부모 클래스인 Lecture 에서 메서드 탐색을 계속속 하다가, Lecture 에서 stats 메서드를 발견하고 실행</li>
+<li>실행 중에, self 참조가 가리키는 getEvaluationMethod 메세지를 전송하는 구문과 마주침</li>
+<li>메서드 탐색은 self 참조가 가리키는 객체에서 다시 시작</li>
+</ol>
+<h5 id="이해할-수-없는-메세지"><a href="#이해할-수-없는-메세지" class="headerlink" title="이해할 수 없는 메세지"></a>이해할 수 없는 메세지</h5><p>이해할 수 없는 메세지 처리는 두 타입 언어에 따라 다르다.</p>
+<ol>
+<li><p>정적 타입 언어</p>
+<p>코드를 컴파일 할 때 상속 계층 안의 클래스들이 메세지를 이해할 수 있는지 여부를 판단한다. </p>
+<p>상속 계층 전체를 탐색한 후에도 메시지를 처리할 메서드를 발견하지 못하면 컴파일 에러가 발생한다. (안정적이다)</p>
+</li>
+<li><p>동적 타입 언어</p>
+<p>실제로 코드 실행 전에는 메시지 처리 가능 여부를 판단 할 수 없다.</p>
+<p>하지만, 이해할 수 없는 메세지에 대해 예외를던 는 것 외에도 doesNotUnderstand 나 method_missing 메시제에 응답 할 수 있는 메서드를 구현할 수 있다. (유연하다)</p>
+</li>
+</ol>
+<h5 id="self-대-super"><a href="#self-대-super" class="headerlink" title="self 대 super"></a>self 대 super</h5><p><img src="/image/object_polymorphism_super.png"></p>
+<p>super.average() 에 의해 호출되는 메서드는 부모 클래스의 메서드가 아니라, 더 상위에 위치한 조상 클래스의 메서드일 수 있다.</p>
+<ol>
+<li><p>self 전송</p>
+<p>메세지를 수신한 객체의 클래스에 따라 메서드를 탐색할 시작 위치를 동적으로 결정</p>
+</li>
+<li><p>super 전송</p>
+<p>항상 메세지를 전송하는 클래스의 부모 클래스에서부터 시작</p>
+</li>
+</ol>
+<h2 id="5-상속-대-위임"><a href="#5-상속-대-위임" class="headerlink" title="5. 상속 대 위임"></a>5. 상속 대 위임</h2><p><img src="/image/object_polymorphism_same_self.png"></p>
+<p>GradeLecture 인스턴스 입장에서 self 참조는, GradeLecture 인스턴스 자신이다.</p>
+<p>GradeLecture 인스턴스에 포함된 Lecture 입장에서 self 참조는, GradeLecture 인스턴스이다. self 참조는 항상 메세지를 수신한 객체를 가리키기 때문이다.</p>
+<p>즉, 상속 계층을 구성하는 객체들 사이에서는 self 참조를 공유하기 때문에 개념적으로 각 인스턴스에서 self 참조를 공유하는 self 변수를 포함하는 것처럼 표현할 수 있다.</p>
+<p>상속은 동적으로 메서드를 탐샘하기 위해 현재의 실행문맥을 가지고 있는 self 참조를 전달한다. 그리고 이 객체들 사이에서는 메시지를 전달하는 과정이 자동으로 이뤄진다. 그래서, 자동적인 메세지 위임이라고 한다.</p>
+<hr>
+<p>오브젝트 &lt;조영호&gt;</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[오브젝트] 12장_다형성</p><p><a href="https://junhee-ko.github.io/2020/01/06/object-chapter12/">https://junhee-ko.github.io/2020/01/06/object-chapter12/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2020-01-06</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/01/13/object-chapter13/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[오브젝트] 13장_서브클래싱과 서브타이핑</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/01/05/big-data-chapter5/"><span class="level-item">[빅데이터를 지탱하는 기술] 5장_빅데이터 파이프라인</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

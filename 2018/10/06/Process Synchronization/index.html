@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Process Sysncronization - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="데이터의 접근데이터를 읽어와서 연산하고 다시 저장합니다.  Race ConditionS-box를 공유하는 E-box가 여럿 있는 경우 Race Condition의 가능성이 있습니다.ex) 커널 모드 수행 중 인터럽트로 커널모드 다른 루틴 수행시  race condition (1&amp;#x2F;3) kernel 수행 중 인터럽트 발생 커널모드 running 중 inetrr"><meta property="og:type" content="blog"><meta property="og:title" content="Process Sysncronization"><meta property="og:url" content="https://junhee-ko.github.io/2018/10/06/Process%20Synchronization/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="데이터의 접근데이터를 읽어와서 연산하고 다시 저장합니다.  Race ConditionS-box를 공유하는 E-box가 여럿 있는 경우 Race Condition의 가능성이 있습니다.ex) 커널 모드 수행 중 인터럽트로 커널모드 다른 루틴 수행시  race condition (1&amp;#x2F;3) kernel 수행 중 인터럽트 발생 커널모드 running 중 inetrr"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/100601.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100602.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100603.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100604.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100605.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100606.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100607.png"><meta property="og:image" content="https://junhee-ko.github.io/image/100608.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100701.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100702.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100703.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100704.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100705.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100706.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100707.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100708.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100709.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100710.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100711.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100712.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100713.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100714.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100715.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100716.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100717.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100718.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100719.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100720.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100721.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100722.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100723.png"><meta property="og:image" content="https://junhee-ko.github.io/image/os100724.png"><meta property="article:published_time" content="2018-10-05T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.830Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/100601.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2018/10/06/Process%20Synchronization/"},"headline":"Process Sysncronization","image":["https://junhee-ko.github.io/image/100601.png","https://junhee-ko.github.io/image/100602.png","https://junhee-ko.github.io/image/100603.png","https://junhee-ko.github.io/image/100604.png","https://junhee-ko.github.io/image/100605.png","https://junhee-ko.github.io/image/100606.png","https://junhee-ko.github.io/image/100607.png","https://junhee-ko.github.io/image/100608.png","https://junhee-ko.github.io/image/os100701.png","https://junhee-ko.github.io/image/os100702.png","https://junhee-ko.github.io/image/os100703.png","https://junhee-ko.github.io/image/os100704.png","https://junhee-ko.github.io/image/os100705.png","https://junhee-ko.github.io/image/os100706.png","https://junhee-ko.github.io/image/os100707.png","https://junhee-ko.github.io/image/os100708.png","https://junhee-ko.github.io/image/os100709.png","https://junhee-ko.github.io/image/os100710.png","https://junhee-ko.github.io/image/os100711.png","https://junhee-ko.github.io/image/os100712.png","https://junhee-ko.github.io/image/os100713.png","https://junhee-ko.github.io/image/os100714.png","https://junhee-ko.github.io/image/os100715.png","https://junhee-ko.github.io/image/os100716.png","https://junhee-ko.github.io/image/os100717.png","https://junhee-ko.github.io/image/os100718.png","https://junhee-ko.github.io/image/os100719.png","https://junhee-ko.github.io/image/os100720.png","https://junhee-ko.github.io/image/os100721.png","https://junhee-ko.github.io/image/os100722.png","https://junhee-ko.github.io/image/os100723.png","https://junhee-ko.github.io/image/os100724.png"],"datePublished":"2018-10-05T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.830Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"데이터의 접근데이터를 읽어와서 연산하고 다시 저장합니다.  Race ConditionS-box를 공유하는 E-box가 여럿 있는 경우 Race Condition의 가능성이 있습니다.ex) 커널 모드 수행 중 인터럽트로 커널모드 다른 루틴 수행시  race condition (1&#x2F;3) kernel 수행 중 인터럽트 발생 커널모드 running 중 inetrr"}</script><link rel="canonical" href="https://junhee-ko.github.io/2018/10/06/Process%20Synchronization/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-05T15:00:00.000Z" title="10/6/2018, 12:00:00 AM">2018-10-06</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.830Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/os/">OS</a></span></div></div><h1 class="title is-3 is-size-4-mobile">Process Sysncronization</h1><div class="content"><h5 id="데이터의-접근"><a href="#데이터의-접근" class="headerlink" title="데이터의 접근"></a>데이터의 접근</h5><p>데이터를 읽어와서 연산하고 다시 저장합니다.</p>
+<p><img src="/image/100601.png"></p>
+<h5 id="Race-Condition"><a href="#Race-Condition" class="headerlink" title="Race Condition"></a>Race Condition</h5><p>S-box를 공유하는 E-box가 여럿 있는 경우 Race Condition의 가능성이 있습니다.<br>ex) 커널 모드 수행 중 인터럽트로 커널모드 다른 루틴 수행시</p>
+<p><img src="/image/100602.png"></p>
+<h5 id="race-condition-1-3"><a href="#race-condition-1-3" class="headerlink" title="race condition (1/3)"></a>race condition (1/3)</h5><ul>
+<li>kernel 수행 중 인터럽트 발생</li>
+<li>커널모드 running 중 inetrrupt 발생하여 인터럽트 처리 루틴이 수행</li>
+<li>양쪽 다 커널 코드이므로 kernel address space 공유</li>
+</ul>
+<p><img src="/image/100603.png"></p>
+<h5 id="race-condition-2-3"><a href="#race-condition-2-3" class="headerlink" title="race condition (2/3)"></a>race condition (2/3)</h5><p>해결책 : 커널 모드에서 수행 중일 때는 CPU를 preempt 하지 않음. 커널 모드에서 사용자 모드로 돌아 갈때 preempt.</p>
+<p><img src="/image/100604.png"></p>
+<p><img src="/image/100605.png"></p>
+<h5 id="race-condition-3-3"><a href="#race-condition-3-3" class="headerlink" title="race condition (3/3)"></a>race condition (3/3)</h5><ul>
+<li><p>CPU가 여러개인 경우</p>
+</li>
+<li><p>해결</p>
+<ul>
+<li>커널 내부에 있는 각 공유 데이터에 접근할 때마다 그 데이터에 lock / unlock을 하는 방법</li>
+<li>한번에 하나의 CPU만이 커널에 들어갈 수 있게 하는 방법</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image/100606.png">    </p>
+<h5 id="Process-Syncronization-문제"><a href="#Process-Syncronization-문제" class="headerlink" title="Process Syncronization 문제"></a>Process Syncronization 문제</h5><ul>
+<li>공유 데이터의 동시 접근은 데이터의 불일치 문제 발생시킬 수 있음</li>
+<li>일관성 유지를 위해서 협력 프로세스간의 실행순서를 정해주는 매커니즘 필요</li>
+<li>Race condition<ul>
+<li>여러 프로세스들이 동시에 공유 데이터를 접근하는 상황</li>
+<li>데이터의 최종 연산 결과는 마지막에 그 데이터를 다룬 프로세스에 따라다라짐</li>
+<li>이를 막기 위해 concurrent processsms 동기화 되어야한다.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image/100607.png"></p>
+<h5 id="The-Critical-Section-Problem"><a href="#The-Critical-Section-Problem" class="headerlink" title="The Critical-Section Problem"></a>The Critical-Section Problem</h5><p>Critical-Section은 공유 데이터를 접근하는 코드입니다.</p>
+<ul>
+<li>n개의 프로세스가 공유 데이터를 동시에 사용하기를 원하는 경우</li>
+<li>각 프로세스의 code segment에는 공유 데이터를 접근하는 코드인 ciritical sectoin이 존재</li>
+<li>하나의 프로세스가 ciritical section에 있을 때 다른 모든 프로세스는 ciritical section에 들어갈 수 없어야한다.</li>
+</ul>
+<p><img src="/image/100608.png"></p>
+<p><img src="/image/os100701.png"></p>
+<h5 id="프로그램적-해결법의-충족-조건"><a href="#프로그램적-해결법의-충족-조건" class="headerlink" title="프로그램적 해결법의 충족 조건"></a>프로그램적 해결법의 충족 조건</h5><ul>
+<li>Mutual Exclution<ul>
+<li>프로세스가 pi가 critical section 부분을 수행중이면 다른 모든 프로세스들은 그들의 critical section에 들어가면 안된다.</li>
+</ul>
+</li>
+<li>Progress<ul>
+<li>아무도 critical section에 있지 않은 상태에서 critical section에 들어가고자 하는 프로세스가 있으면 critical section에 들어가게 해주어야 한다.</li>
+</ul>
+</li>
+<li>Bounded Wating<ul>
+<li>프로세스가 critical section에 들어가려고 요청한 후부터 그 요청이 허용될 때까지 다른 프로세스들이 critical section에 들어가는 횟수에 한계가 있어야 한다.</li>
+</ul>
+</li>
+</ul>
+<h5 id="알고리즘-1"><a href="#알고리즘-1" class="headerlink" title="알고리즘 1"></a>알고리즘 1</h5><p>P0</p>
+<p>int turn ;</p>
+<p>initially turn=0; (turn이 0 : 0번 프로세스 차례)</p>
+<p><img src="/image/os100702.png"></p>
+<p>P0이 빈번히 들어가고 싶으면?</p>
+<h5 id="알고리즘-2"><a href="#알고리즘-2" class="headerlink" title="알고리즘 2"></a>알고리즘 2</h5><p>boolean flag[2];</p>
+<p>initially flag[모두] =false; // no one is in CS</p>
+<p>Pi ready to enter its critical section if flag[i] == true</p>
+<p><img src="/image/os100703.png"></p>
+<p>들어가기전에 둘다 깃발을 들으면 아무도 못들어가.</p>
+<h5 id="알고리즘3-Peterson’s-Algorithm"><a href="#알고리즘3-Peterson’s-Algorithm" class="headerlink" title="알고리즘3 (Peterson’s Algorithm)"></a>알고리즘3 (Peterson’s Algorithm)</h5><p><img src="/image/os100704.png"></p>
+<p>Busy Wating (spin lock)</p>
+<p>내가 CPU를 잡고 while문에 있는데, 그때 다른 애가 CPU를 잡으면 ? </p>
+<h5 id="Sysnchnization-Hardware"><a href="#Sysnchnization-Hardware" class="headerlink" title="Sysnchnization Hardware"></a>Sysnchnization Hardware</h5><p><img src="/image/os100705.png"></p>
+<p><img src="/image/os100706.png"></p>
+<ul>
+<li>하드웨어적으로 Test &amp; modify를 atuomic하게 수행할 수 있도록 지원하는 경우 앞의 문제는 간단히 해결</li>
+<li>값을 읽어내고 바꾸는 과정을 한번에</li>
+</ul>
+<h5 id="Lock이-뭔가요"><a href="#Lock이-뭔가요" class="headerlink" title="Lock이 뭔가요?"></a>Lock이 뭔가요?</h5><p>동시에 공유 자원에 접근하는 것을 막기 위해 Critical Section 에 진입하는 프로세스는 Lock 을 획득하고 Critical Section을 빠져나올 때, Lock을 방출함으로써 동시에 접근이 되지 않도록 합니다.</p>
+<h5 id="세마포어가-뭔가요"><a href="#세마포어가-뭔가요" class="headerlink" title="세마포어가 뭔가요?"></a>세마포어가 뭔가요?</h5><p>크리티컬 섹션 문제를 해결하고 멀티 프로세싱 환경에서 프로세스 동기화를 이루기 위해 사용되는 Interger 변수입니다. </p>
+<p>Counting 세마포어와 Binary 세마포어가 있습니다. Counting 세마포어는 가용한 개수를 가진 자원 에 대한 접근 제어용으로 사용되며, 그 가용한 자원의 개수로 초기화 됩니다. 자원을 사용하면 세마포어가 감소, 방출하면 세마포어가 증가합니다. Binaray 세마포어는 0 과 1 사이의 값만 가능합니다.</p>
+<h5 id="P-연산과-V-연산이-뭔가요"><a href="#P-연산과-V-연산이-뭔가요" class="headerlink" title="P 연산과 V 연산이 뭔가요"></a>P 연산과 V 연산이 뭔가요</h5><p>P 연산은 공유자원을 획득하는 연산(Wait Function)이고, V 연산은 공유자원을  반납하는 연산(Signal Function)입니다. </p>
+<p>프로세스 동기화를 이루기 위해, 크리티컬 섹션은 P 연산과 V 연산으로 둘러싸여 있습니다.</p>
+<p><img src="/image/os100707.png"></p>
+<p><img src="/image/os100708.png"></p>
+<h5 id="뮤텍스와-세마포어는-어떤-차이인가요"><a href="#뮤텍스와-세마포어는-어떤-차이인가요" class="headerlink" title="뮤텍스와 세마포어는 어떤 차이인가요?"></a>뮤텍스와 세마포어는 어떤 차이인가요?</h5><p>구현 둘의 목적이 다릅니다. 뮤텍스는 locking mechanism 이고 세마포어는  signaling mechanism 입니다.<br>뮤텍스 : 오직 하나의 테스크만이 뮤텍스를 획득할 수 있습니다.<br>세마포어 :  “I am done, you can carry on” kind of signal .</p>
+<h5 id="Critical-Section-of-n-Processes"><a href="#Critical-Section-of-n-Processes" class="headerlink" title="Critical Section of n Processes"></a>Critical Section of n Processes</h5><p><img src="/image/os100709.png"></p>
+<h5 id="Block-Wakeup-Impemetation"><a href="#Block-Wakeup-Impemetation" class="headerlink" title="Block / Wakeup Impemetation"></a>Block / Wakeup Impemetation</h5><p><img src="/image/os100710.png"></p>
+<p><img src="/image/os100711.png"></p>
+<ul>
+<li>block<ul>
+<li>커널은 block을 호출한 프로세스를 suspend 시킴</li>
+<li>이 프로세스의 PCB를 semaphore에 대한 wait queue에 넣음</li>
+</ul>
+</li>
+<li>wakeup(P)<ul>
+<li>block 된 프로세스 P를 wakeup 시킴</li>
+<li>이 프로세스의 PCB를 ready queue로 옮김</li>
+</ul>
+</li>
+</ul>
+<h5 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h5><p><img src="/image/os100712.png"></p>
+<h5 id="busy-wati-vs-block-wakeup"><a href="#busy-wati-vs-block-wakeup" class="headerlink" title="busy-wati vs block/wakeup"></a>busy-wati vs block/wakeup</h5><p>CS 길이가 긴 경우 Block/Wakeup이 적당합니다. CS 길이가 매우 짧은 경우 Block/Wakeup 오버헤드가 busy-wait 오버헤드보다 더 커질 수 있습니다. 일반적으로  block/wakeup 방식이 더 좋습니다.</p>
+<h5 id="Deadlock-and-Starvation"><a href="#Deadlock-and-Starvation" class="headerlink" title="Deadlock and Starvation"></a>Deadlock and Starvation</h5><ul>
+<li><p>Deadlock</p>
+<p>둘 이상의 프로세스가 서로 상대방에 의해 충족될 수 있는 event를 무한히 기다리는 현상</p>
+<p>P0와 P1은 S와 Q 모두가 필요하다.</p>
+<p>P0가 S를 차지했을 때, P1이 CPU를 가져가버리면, Deadlock 발생</p>
+</li>
+</ul>
+<p><img src="/image/os100713.png"></p>
+<ul>
+<li><p>Starvation</p>
+<p>indefinite blocking. 프로세스가 suspend된 이유에 해당하는 세마포어 큐에서 빠져나갈수 없는 현상</p>
+</li>
+</ul>
+<h5 id="Bounded-Buffer-Problem"><a href="#Bounded-Buffer-Problem" class="headerlink" title="Bounded-Buffer Problem"></a>Bounded-Buffer Problem</h5><p>Producer-Consumer Problem</p>
+<p><img src="/image/os100714.png"></p>
+<p>주황색은 Producer가 생성한다.</p>
+<p>생산자 둘이 한 위치에 생성하면?</p>
+<p>하나를 소비자 둘이 동시에 소비 하려고 하면?</p>
+<p>비버있는 버퍼가 없는데 또 생산자가 만들려고 하면?</p>
+<ul>
+<li><p>Syncrhonization variables</p>
+<ul>
+<li>mutual exclution<ul>
+<li>need binary semaphore (shared data의 mutual exlusion을 위해)</li>
+<li>lock 걸고 풀고</li>
+</ul>
+</li>
+<li>resource count <ul>
+<li>need integer semaphore (남은 full/empty buffer의 수 표시)</li>
+<li>자원 개수</li>
+</ul>
+</li>
+</ul>
+<p>semaphore full =0, empty =n, mutex =1;</p>
+</li>
+</ul>
+<p><img src="/image/os100715.png"></p>
+<ul>
+<li><p>Produer</p>
+<ul>
+<li>빈 버퍼가 있으면 버퍼 획득하고, 버퍼에 락 걸고, 버퍼에 데이터 넣고, 버퍼에 락 풀고, full++</li>
+</ul>
+</li>
+<li><p>Consumer</p>
+<ul>
+<li>내용이 들어잇는 버퍼 있으면, 버퍼에 락 걸고, 버퍼에서 데이터 빼고, 버퍼 락 풀고, empty ++</li>
+</ul>
+</li>
+</ul>
+<h5 id="Readers-Writes-Problem"><a href="#Readers-Writes-Problem" class="headerlink" title="Readers-Writes Problem"></a>Readers-Writes Problem</h5><p>한 process가 DB에 write 중일 때 다른 process가 접근하면 안됨 / read는 동시에 여럿이 해도 됨</p>
+<ul>
+<li>Shared data<ul>
+<li>DB 자체</li>
+<li>int readcount=0; //현재 DB에 접근 중인 Reader의 수</li>
+</ul>
+</li>
+<li>Sysncronization variablees<ul>
+<li>semaphore mutex =1 ( 공유변수 readcount를 접근하는 코드의 mutual exlution 보장), db=1;</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image/os100716.png"></p>
+<h5 id="Dining-Philosophers-Problem"><a href="#Dining-Philosophers-Problem" class="headerlink" title="Dining-Philosophers Problem"></a>Dining-Philosophers Problem</h5><p>배가 고파지면 자기의 왼쪽과 오른쪽에 놓아져 있는 젓가락을 잡음</p>
+<p><img src="/image/os100717.png"></p>
+<p><img src="/image/os100718.png"></p>
+<ul>
+<li><p>문제</p>
+<ul>
+<li>모두다 왼쪽 젓가락을 잡아버리면? </li>
+<li>Deadlock</li>
+</ul>
+</li>
+<li><p>해결</p>
+<ul>
+<li>4명의 철학자만이 테이블에 동시에 앉을 수 있도록</li>
+<li>젓가락을 두개 모두 집을 수 있을 때에만 젓가락을 잡을 수 있도록 (아래의 경우)</li>
+<li>비대칭. 짝수 철학자는 왼쪽 젓가락부터 집도록</li>
+</ul>
+</li>
+</ul>
+<p>enum {thinking, hungry, eating} state[5];</p>
+<p>semaphore self[5]=0;    // 동시에 젓가락 두개 모두 잡을 수 있는 권한</p>
+<p>semaphore mutex=1;</p>
+<p><img src="/image/os100719.png"></p>
+<p><img src="/image/os100720.png"></p>
+<h5 id="Monitor"><a href="#Monitor" class="headerlink" title="Monitor"></a>Monitor</h5><ul>
+<li>Semaphore의 문제점<ul>
+<li>코딩이 힘들다</li>
+<li>정확성의 입증이 어려움</li>
+<li>자발적 협력이 필요</li>
+<li>한번의 실수가 모든 시스템에 영향</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image/os100721.png"></p>
+<ul>
+<li>동시 수행중인 프로세스 사이에서 abstract data type의 안전한 공유를 보장하기위한 high-level syncronization  construct <ul>
+<li>모니터 내에서는 한번에 하나의 하나의 프로세스만이 활동 가능</li>
+<li>프로그래머가 동기화 제약 조건을 명시적으로 코딩할 필요 없음</li>
+<li>프로세스가 모니터 안에서 기다릴수 있도록 하기 위해 condition variable 사용. condition x, y</li>
+<li>condition variable 은 wait와 signal 연산에 의해서만 접근 가능<ul>
+<li>x.wait();<ul>
+<li>x.wait()을 invoke한 프로세스는 다른 프로세스가 x.signal()을 invoke 하기 전까지 suspend</li>
+</ul>
+</li>
+<li>x.siganl();<ul>
+<li>x.signal()은 정확하게 하나의 suspend된 프로세스를 resume한다. Suspend된 프로세스가 없으면 아무 일도 일어나지 않는다. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image/os100722.png"></p>
+<p><img src="/image/os100723.png"></p>
+<p><img src="/image/os100724.png"></p>
+<h5 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h5><p>이화여자대학교 반효경 (<a target="_blank" rel="noopener" href="http://www.kocw.net/home/search/kemView.do?kemId=1046323">http://www.kocw.net/home/search/kemView.do?kemId=1046323</a>)</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Process Sysncronization</p><p><a href="https://junhee-ko.github.io/2018/10/06/Process Synchronization/">https://junhee-ko.github.io/2018/10/06/Process Synchronization/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2018-10-06</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2018/10/06/CPU%20Scheduling/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">CPU Scheduling</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2018/10/04/Process%20Managemnet/"><span class="level-item">Process Management</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

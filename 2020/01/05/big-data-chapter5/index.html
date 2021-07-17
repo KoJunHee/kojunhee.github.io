@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[빅데이터를 지탱하는 기술] 5장_빅데이터 파이프라인 - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="1. 워크 플로우 관리기초 지식 워크 플로우 관리 도구 워크 플로우 관리 도구의 주요 역할은, 정기적으로 태스크를 실행하고 비정상적인 상태를 감지하여 해결을 돕는 것이다. ex) Airflow, Azkaban, Digdag, Luigi, Oozie  태스크 데이터 파이프라인의 실행 과정에서 데이터를 잇달아 이동하면서 정해진 처리를 반복하는데, 이때 실행되는"><meta property="og:type" content="blog"><meta property="og:title" content="[빅데이터를 지탱하는 기술] 5장_빅데이터 파이프라인"><meta property="og:url" content="https://junhee-ko.github.io/2020/01/05/big-data-chapter5/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="1. 워크 플로우 관리기초 지식 워크 플로우 관리 도구 워크 플로우 관리 도구의 주요 역할은, 정기적으로 태스크를 실행하고 비정상적인 상태를 감지하여 해결을 돕는 것이다. ex) Airflow, Azkaban, Digdag, Luigi, Oozie  태스크 데이터 파이프라인의 실행 과정에서 데이터를 잇달아 이동하면서 정해진 처리를 반복하는데, 이때 실행되는"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_idemponent.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_mapreduce.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_store.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_after_store.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_write.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_sql.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_stream.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_stream_first.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_lamda.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_workflow_out_of_order.png"><meta property="article:published_time" content="2020-01-04T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.864Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/big_data_workflow_idemponent.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2020/01/05/big-data-chapter5/"},"headline":"[빅데이터를 지탱하는 기술] 5장_빅데이터 파이프라인","image":["https://junhee-ko.github.io/image/big_data_workflow_idemponent.png","https://junhee-ko.github.io/image/big_data_workflow_mapreduce.png","https://junhee-ko.github.io/image/big_data_workflow_store.png","https://junhee-ko.github.io/image/big_data_workflow_after_store.png","https://junhee-ko.github.io/image/big_data_workflow_write.png","https://junhee-ko.github.io/image/big_data_workflow_sql.png","https://junhee-ko.github.io/image/big_data_workflow_stream.png","https://junhee-ko.github.io/image/big_data_workflow_stream_first.png","https://junhee-ko.github.io/image/big_data_workflow_lamda.png","https://junhee-ko.github.io/image/big_data_workflow_out_of_order.png"],"datePublished":"2020-01-04T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.864Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"1. 워크 플로우 관리기초 지식 워크 플로우 관리 도구 워크 플로우 관리 도구의 주요 역할은, 정기적으로 태스크를 실행하고 비정상적인 상태를 감지하여 해결을 돕는 것이다. ex) Airflow, Azkaban, Digdag, Luigi, Oozie  태스크 데이터 파이프라인의 실행 과정에서 데이터를 잇달아 이동하면서 정해진 처리를 반복하는데, 이때 실행되는"}</script><link rel="canonical" href="https://junhee-ko.github.io/2020/01/05/big-data-chapter5/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-01-04T15:00:00.000Z" title="1/5/2020, 12:00:00 AM">2020-01-05</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.864Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/big-data/">Big Data</a></span></div></div><h1 class="title is-3 is-size-4-mobile">[빅데이터를 지탱하는 기술] 5장_빅데이터 파이프라인</h1><div class="content"><h2 id="1-워크-플로우-관리"><a href="#1-워크-플로우-관리" class="headerlink" title="1. 워크 플로우 관리"></a>1. 워크 플로우 관리</h2><h5 id="기초-지식"><a href="#기초-지식" class="headerlink" title="기초 지식"></a>기초 지식</h5><ol>
+<li><p>워크 플로우 관리 도구</p>
+<p>워크 플로우 관리 도구의 주요 역할은, 정기적으로 태스크를 실행하고 비정상적인 상태를 감지하여 해결을 돕는 것이다.</p>
+<p>ex) Airflow, Azkaban, Digdag, Luigi, Oozie</p>
+</li>
+<li><p>태스크</p>
+<p>데이터 파이프라인의 실행 과정에서 데이터를 잇달아 이동하면서 정해진 처리를 반복하는데, 이때 실행되는 개별 처리이다.</p>
+</li>
+<li><p>기본 기능</p>
+<ul>
+<li><p>테스크를 정기적인 스케쥴로 실행하고 결과 통지</p>
+</li>
+<li><p>테스크 간의 의존 관계를 정하고 순서대로 빠지없이 실행</p>
+</li>
+<li><p>테스크의 실행 결과를 보관하고, 오류 발생하면 재실행 할 수 있도록 하기</p>
+</li>
+</ul>
+</li>
+<li><p>선언 형과 스크립트 형</p>
+<ul>
+<li>선언형 : XML 이나 YAML 등의 서식으로 워크플로우 기술</li>
+<li>스크립트형 : 스크립트 언어로 워크플로우 정의</li>
+</ul>
+</li>
+</ol>
+<h5 id="오류로부터-복구-방법"><a href="#오류로부터-복구-방법" class="headerlink" title="오류로부터 복구 방법"></a>오류로부터 복구 방법</h5><p>모든 오류를 사전에 예상하는 것은 불가능하기 때문에, 오류 발생 가능성을 고려하여 대처 방법을 결정해야한다.</p>
+<ol>
+<li><p>Retry</p>
+<p>재시도를 반복해도 문제가 없는 태스크라면, 1회나 2회의 재시도를 실행해도 좋다.</p>
+<p>그러나, 그 이상은 재시도가 아니라 올바른 문제 해결 방법을 찾아야한다.</p>
+</li>
+<li><p>Backfill</p>
+<p>플로우 전체를 처음부터 다시 실행한다. 다음 상황에 사용한다.</p>
+<ul>
+<li>태스크의 실패가 며칠 동안이나 계속된 후에 이를 모아서 재시도 하고 싶을 때</li>
+<li>새롭게 만든 워크 플로우를 과거로 거슬라 올라가 실행하고 싶을 때</li>
+</ul>
+</li>
+</ol>
+<h5 id="재실행의-안정성을-위한-두가지-방법"><a href="#재실행의-안정성을-위한-두가지-방법" class="headerlink" title="재실행의 안정성을 위한 두가지 방법"></a>재실행의 안정성을 위한 두가지 방법</h5><ol>
+<li><p>원자성 조작 (Atomic Operation)</p>
+<p>예를 들어, INSERT 문 2회를 호출하는 태스크가 있다고 하자.</p>
+<p>첫 번째의 INSERT 가 종료되고 오류가 발생하면 태스크를 재실행하면 동일한 데이터가 다시 쓰이게 될 수 있다.</p>
+<p>이 문제를 회피하기 위해, 각 태스크가 <code>시스템에 변경을 가하는 것을 한 번만 할 수 있도록</code> 하는 것이다.</p>
+<p>쓰기가 필요한 수 만큼 테스크를 나누는 것이다. </p>
+<p>하지만, 태스크 구현상의 버그 등으로 원자성 조작 직후에 문제가 발생하면 원자성 조작 자체는 성공했어도 워크 플로우 관리 도구에서는 오류로 여길 수 있다.</p>
+</li>
+<li><p>멱등한 조작</p>
+<p>더 확실한 방법은, <code>동일한 태스크를 여러 번 실행해도 동일한 결과</code>가 되도록 하는 것이다.</p>
+<p>예를 들어 분산 스토리지에 파일을 업로드할 때, </p>
+<ul>
+<li>매번 새로운 파일명을 만들 경우 데이터를 추가 (append) 하는 것이고, </li>
+<li>동일 파일명으로 덮어쓰면 치환 (replace)하는 것이다. 치환은 반복해도 결과가 변하지 않으므로 멱등하다.</li>
+</ul>
+</li>
+</ol>
+<h5 id="데이터-추가"><a href="#데이터-추가" class="headerlink" title="데이터 추가"></a>데이터 추가</h5><ol>
+<li><p>멱등한 추가</p>
+<p>과거의 모든 데이터를 치환하면 멱등하지만 부하가 커진다. 그래서, Table Partitioning 이 필요하다.</p>
+<p>예를 들면 테이블을 1일마다 또는 1시간 마다 파티션으로 분할하고 파티션 단위로 치환하는 것이다.</p>
+<p>파티션의 모든 데이터를 삭제할 때, TRUNCATE 문이나 INSESRT OVERWRITER 문 등을 사용할 수 있다.</p>
+<p>ex) Hive 는 파티셔닝 지원, Amazon Redshift 는 파티셔닝을 지원하지 않아 UNION ALL 사용</p>
+</li>
+<li><p>원자성을 지닌 추가</p>
+<p>하나의 테이블에 여러번 데이터를 써넣는 경우, 중간 테이블을 이용해 마지막에 목적 테이블에 한 번 추가한다.</p>
+<p>즉, 전반 부분에서는 중간 테이블을 만들기 위해 테이블을 치환하므로 멱등하다.</p>
+<p>그러나 마지막에 INSESRT 는 단순히 추가이므로 전체로서는 멱등하지 않다.</p>
+<p>단, 마지막에 쓰기를 1회만 실시하므로 이것은 원자성을 지닌 조작이다. </p>
+<p>그래서 플로우가 실패해도 아무것도 쓰이지 않아 실패한 태스크를 재실행해도 복구가 완료된다.</p>
+</li>
+</ol>
+<h5 id="워크-플로우-전체를-멱등하게-하기"><a href="#워크-플로우-전체를-멱등하게-하기" class="headerlink" title="워크 플로우 전체를 멱등하게 하기"></a>워크 플로우 전체를 멱등하게 하기</h5><p>재실행의 안정성을 위해서는, 멱등하게 구현해야한다.</p>
+<p><img src="/image/big_data_workflow_idemponent.png"></p>
+<h5 id="Task-Queue-자원의-소비량-컨트롤"><a href="#Task-Queue-자원의-소비량-컨트롤" class="headerlink" title="Task Queue : 자원의 소비량 컨트롤"></a>Task Queue : 자원의 소비량 컨트롤</h5><p>대량의 테스크를 동시 실행하면 서버에 과부하가 걸리므로 어느 정도 제한 해야한다.</p>
+<p>워크 플로우 관리 도구는, 태스크의 크기나 동시 실행 수를 변화시켜 자원의 소비량을 조정해 모든 태스크가 원활하게 실행되도록 할 수 있다. </p>
+<p>이 때, Job Queue 또는 Task Queue 를 사용할 수 있다. </p>
+<p>모든 태스크는 큐에 저장되고 일정 수의 워커 프로세스가 순서대로 꺼내며 병렬화가 실현된다.</p>
+<h2 id="2-배치-형-데이터-플로우"><a href="#2-배치-형-데이터-플로우" class="headerlink" title="2. 배치 형 데이터 플로우"></a>2. 배치 형 데이터 플로우</h2><h5 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h5><p><img src="/image/big_data_workflow_mapreduce.png"></p>
+<p>데이터 처리 첫 번째 단계를 Map, 그 결과를 모아서 집계하는 두 번째 단계를 Reduce 라고 한다.</p>
+<p>이렇게 Map 과 Reduce 를 반복하면서 목적하는 결과를 얻을 때 까지 계속 데이터를 변화하는 구조가 MapReduce 이다.</p>
+<p>MapReduce 는 Map 과 Reduce 의 하나의 사이클이 끝나지 않으면 다음 처리로 이동하지 않는다. 즉, 하나의 사이클에서 다음 사이클로 이동할 때 까지 대기 시간이 발생한다.</p>
+<h5 id="데이터-플로우"><a href="#데이터-플로우" class="headerlink" title="데이터 플로우"></a>데이터 플로우</h5><p>이전의 MapReduce 를 사용한 데이터 처리에서는, MapReduce 프로그램을 워크플로우의 태스크로 등록해 다단계의 복잡한 데이터 처리를 할 수 있었다.</p>
+<p>현재는, 다단계의 데이터 처리를 분산 시스템 내부에서 실행할 수 있다. 이것을 데이터 플로우라고 한다. </p>
+<p>ex) 데이터 플로우를 위한 프레임워크 :  Google Cloud Dataflow, Apache Spark, Apache Flick</p>
+<h5 id="MapReduce-를-대신할-세로운-프레임워크"><a href="#MapReduce-를-대신할-세로운-프레임워크" class="headerlink" title="MapReduce 를 대신할 세로운 프레임워크"></a>MapReduce 를 대신할 세로운 프레임워크</h5><p>세로운 프레임워크의 공통 특징은 DAG (Direct Acyclic Graph) 이다.</p>
+<p>다음 두 가지 성질이 있다.</p>
+<ol>
+<li>방향성 : 노드와 노드가 화살표로 연결</li>
+<li>비순환 : 화살표를 따라가도 동일 노드로 돌아오지 않음</li>
+</ol>
+<p>DAG 관점에서 MapReduce 와 데이터 플로우의 차이는,</p>
+<ol>
+<li><p>MapReduce</p>
+<p>MapReduce 도 Map 과 Reduce 의 두 종류 노드로 이루어진 DAG 라 생각할 수 있다. </p>
+<p>하지만, 하나의 노드에서 처리가 끝나지 않으면 다음 처리로 진행할 수 없다.</p>
+</li>
+<li><p>데이터플로우</p>
+<p>DAG 를 구성하는 노드가 모두 동싱 병행으로 실행된다.</p>
+<p>처리가 끝난 데이터는 네트워크를 거쳐 차례대로 전달된다. </p>
+<p>먼저 데이터 파이프라인 전체를 DAG 로 조립한 뒤 실행해서, 내부 스캐쥴러가 분산 시스템에 효과적인 실행 계획을 세운다.</p>
+</li>
+</ol>
+<h5 id="데이터-플로우와-워크플로우-조합하기"><a href="#데이터-플로우와-워크플로우-조합하기" class="headerlink" title="데이터 플로우와 워크플로우 조합하기"></a>데이터 플로우와 워크플로우 조합하기</h5><p>테스크를 정기적으로 실행하거나 실패한 테스크를 기록하여 복구하는 것은, 데이터플로우가 아니라 워크 플로우의 관리가 필요하다. 따라서, 데이터 플로우의 프로그램도 워크 플로우의 일부로 실행되는 하나의 태스크로 고려될 수 있다.</p>
+<ol>
+<li><p>데이터를 읽어들이는 플로우</p>
+<p><img src="/image/big_data_workflow_store.png"></p>
+<p>데이터 플로우로부터 읽어 들일 데이터는 성능적으로 안정된 분산 스토리지에 배치해야한다. 외부의 데이터 소스에서 데이터를 읽어들일 때는 읽기 속도에 한계가 있으므로 데이터 플로우를 사용한다고 해도 빨라진다고 단언할 수 없다.</p>
+<p><img src="/image/big_data_workflow_after_store.png"></p>
+<p>분산스토리지로 데이터 복사가 완료되면 데이터 플로우로 처리한다.</p>
+</li>
+<li><p>데이터를 써서 내보내는 워크플로우</p>
+<p>데이터 플로우 안에서 대량의 데이터를 외부에 전송해서는 안된다. 왜냐하면,</p>
+<ul>
+<li><p>쓰기 작업에 오래 걸리면, 실행이 완료되지 않아 자원을 계속해서 소비 할 수 있다.</p>
+</li>
+<li><p>최악의 경우, 쓰기 작업이 실패해 처음부터 다시 데이터 처리를 재실행 해야 할 수 있다.</p>
+</li>
+</ul>
+<p>그래서, 데이터 플로우는 CSV 파일과 같이 취합하기 쉬운 형식으로 분산 스토리지에 넣는 것 까지한다. </p>
+<p>외부 시스템에 데이터를 전송하는 것은 워크 플로우의 역할이다. </p>
+<ul>
+<li><p>벌크 형 전송 도구를 사용해 태스크를 구현하거나</p>
+</li>
+<li><p>외부 시스템쪽에 파일을 읽어들이도록 지시한다.</p>
+</li>
+</ul>
+<p><img src="/image/big_data_workflow_write.png"></p>
+</li>
+</ol>
+<h5 id="데이터-플로우와-SQL-을-나누어-사용하기"><a href="#데이터-플로우와-SQL-을-나누어-사용하기" class="headerlink" title="데이터 플로우와 SQL 을 나누어 사용하기"></a>데이터 플로우와 SQL 을 나누어 사용하기</h5><p><img src="/image/big_data_workflow_sql.png"></p>
+<ol>
+<li><p>SQL을 MPP 데이터베이스에서 실행</p>
+<p>데이터웨어하우스의 파이프라인 </p>
+<p>로드되는 데이터를 만드는 부분까지가 데이터 플로의 역할</p>
+</li>
+<li><p>SQL을 분산 시스템 상의 쿼리 엔진에서 실행 </p>
+<p>데이터마트의 파이프라인</p>
+<p>구조화된 데이터를 만드는 부분까지가 데이터플로우의 역할</p>
+</li>
+</ol>
+<h2 id="3-스트리밍-형-데이터-플로우"><a href="#3-스트리밍-형-데이터-플로우" class="headerlink" title="3. 스트리밍 형 데이터 플로우"></a>3. 스트리밍 형 데이터 플로우</h2><h5 id="배치-처리와-스트림-처리"><a href="#배치-처리와-스트림-처리" class="headerlink" title="배치 처리와 스트림 처리"></a>배치 처리와 스트림 처리</h5><p><img src="/image/big_data_workflow_stream.png"></p>
+<ol>
+<li><p>배치 처리</p>
+<p>도달한 데이터를 우선 분산 스토리지에 보관한다.</p>
+<p>데이터가 영속적으로 보관되기 때문에 몇 번이고 재실행 가능하다. </p>
+<p>집계 효율이 높은 열 지향 스토리지를 구축할 수 있다. </p>
+<p>실행 시에 데이터 양이 정해지기 때문에 유한 데이터 (bounded data)</p>
+</li>
+<li><p>스트림 처리</p>
+<p>데이터 도달과 동시에 처리가 시작된다.</p>
+<p>재실행하는 것은 고려하지 않는다.</p>
+<p>처리한 결과는 시계열 데이터에 적합한 데이터 스토어에 보관하거나 실시간 시스템에 전송한다.</p>
+<p>제한 없이 데이터가 보내지기 때문에 무한 데이터 (unbounded data)</p>
+<p>ex) Spark Streaming</p>
+</li>
+</ol>
+<h5 id="스트림-처리에-의한-1차-집계"><a href="#스트림-처리에-의한-1차-집계" class="headerlink" title="스트림 처리에 의한 1차 집계"></a>스트림 처리에 의한 1차 집계</h5><p><img src="/image/big_data_workflow_stream_first.png"></p>
+<p>분산 스토리지에도 성능 상이나 비용 상의 한계가 있다.</p>
+<p>데이터 양이 많아 한계를 넘어서면, 스트림 처리를 사용해 흐름량을 줄일 수 있다.</p>
+<h5 id="스트림-처리의-두-가지-문제에-대한-대처"><a href="#스트림-처리의-두-가지-문제에-대한-대처" class="headerlink" title="스트림 처리의 두 가지 문제에 대한 대처"></a>스트림 처리의 두 가지 문제에 대한 대처</h5><p>스트림 처리의 문제 두 가지가 있다.</p>
+<ol>
+<li><p>틀린 결과를 어떻게 수정할 것인가</p>
+<p>새롭게 도달한 데이터만 처리한다.</p>
+</li>
+<li><p>늦게 전송된 데이터 취급을 어떻게 할 것인가</p>
+<p>집계가 종료된 후에 도착한 데이터가 있어서, 스트림 처리의 결과가 부정확해질 수 있다.</p>
+</li>
+</ol>
+<p>이 문제 해결을 위해, 스트림 처리와 별개로 배치 처리를 실행시켜 배치 처리의 결과가 옳다고 할 수 있다.</p>
+<p>예를 들어, 일별 보고서를 속보 값으로 하고 월별 보고서를 확정값으로 분류하는 것이다.</p>
+<p>이를 발전 시킨 방법이 람다 아키텍쳐, 람다 아키텍쳐를 단순화한 카파 아키텍쳐가 있다.</p>
+<ol>
+<li><p>람다</p>
+<p><img src="/image/big_data_workflow_lamda.png"></p>
+<p>세 레이어로 구성된다.</p>
+<ul>
+<li><p>배치 레이어</p>
+<p>모든 데이터는 배치 레이어에서 처리한다. 대규모 배치 처리를 위해 실행하며 1회 처리가 오래 걸린다.</p>
+</li>
+<li><p>서빙 레이어</p>
+<p>배치 처리 결과는 서빙 레이어를 통해 접근한다. 응답이 빠른 데이터베이스를 설치해서 집계 결과를 바로 추출한다. </p>
+<p>서빙 레이어에서 얻어진 결과를 배치 뷰 라고 한다. 정기적으로 업데이트 되지만 실시간 정보는 얻을 수 없다.</p>
+</li>
+<li><p>스피드 레이어</p>
+<p>스피드 레이어에서 얻은 결과를 실시간 뷰라고 한다. 배치 뷰가 업데이트 될 동안에만 이용되고 오래된 데이터를 순서대로 삭제된다.</p>
+</li>
+</ul>
+<p>배치뷰와 실시간 뷰를 조합시키는 형태로 쿼리를 실행한다. 최근 24시간 집계 결과는 실시간 뷰를 참고하고 그 이전 데이터는 배치뷰를 이용할 수 있다. </p>
+<p>실시간 뷰의 결과는 나중에 배치 뷰로 치환된다. 그래서 스트림 처리가 정확하지 않아도 길게 보면 문제가 없다.</p>
+</li>
+<li><p>카파</p>
+<p>람다 아키텍쳐는 스피드 레이어와 배치 레이어가 모두 같은 처리를 구현하고 있으므로 번거롭다.</p>
+<p>그래서, 카파 아키테쳐는 스피드 레이어만 남긴다. 대신, 메세지 브로커의 데이터 보관 기한을 길게하여 문제 발생시 메세지 배송 시간을 과거로 다시 설정한다. 그러면 과거의 데이터가 다시 스트림 처리로 흘러 들어 실질적으로 재실행이 이루어진다.</p>
+<p>문제점은, 부하가 높아진다는 것이다. 대량의 과거 데이터를 흘려보내면 평상시와 비교해 몇 배의 자원을 소비하기 때문이다. 클라우드 서비스 보급에 그런 자원을 확보하는 것이 어렵지 않으므로 필요에 따라 스트림 처리를 다시 하는것이 간단하는 것이 카파 아키텍쳐의 주장이다.</p>
+</li>
+</ol>
+<h5 id="Out-of-Order-의-데이터-처리"><a href="#Out-of-Order-의-데이터-처리" class="headerlink" title="Out of Order 의 데이터 처리"></a>Out of Order 의 데이터 처리</h5><p><img src="/image/big_data_workflow_out_of_order.png"></p>
+<p>스트림 처리를 할때 늦게 도달한 메세지, 즉 프로세스 시간과 이벤트 시간의 차이는, 이벤트 시간 윈도윙으로 해결한다.</p>
+<p>즉, 이벤트 시간에 의해 윈도우를 나누는 것이다. </p>
+<p>메세지가 배송된 데이터는 무작위 순이기 때문에 적절히 순서를 바꿔 집계 결과를 업데이트해야한다.</p>
+<p>데이터가 도달할 때마다 해당하는 윈도우를 재집계한다. 데이터를 무한히 계속 보관할 수 없으므로 일정 이상 늦게 온 데이터는 무시한다.</p>
+<hr>
+<p>빅데이터를 지탱하는 기술 &lt;니시다 케이스케&gt;</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[빅데이터를 지탱하는 기술] 5장_빅데이터 파이프라인</p><p><a href="https://junhee-ko.github.io/2020/01/05/big-data-chapter5/">https://junhee-ko.github.io/2020/01/05/big-data-chapter5/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2020-01-05</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/01/06/object-chapter12/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[오브젝트] 12장_다형성</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/01/02/big-data-chapter4/"><span class="level-item">[빅데이터를 지탱하는 기술] 4장_빅데이터 축적</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

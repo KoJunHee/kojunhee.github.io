@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[빅데이터를 지탱하는 기술] 2장_빅데이터 탐색 - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="1. 크로스 집계크로스 집계  크로스 테이블행과 열이 교차하는 부분에 숫자 데이터가 들어감  트랜젝션 테이블행방향으로만 증가하고, 열방향으로는 데이터가 증가하지 않음  크로스 집계트레젝션 테이블에서 크로스 테이블로 변환하는 과정.피봇 테이블을 이용해서 할 수 있다.   룩업 테이블트랜젝션 테이블의 ‘상품 ID’ 를 사용해서 ‘상품명’ 과 ‘상품 카테고리’"><meta property="og:type" content="blog"><meta property="og:title" content="[빅데이터를 지탱하는 기술] 2장_빅데이터 탐색"><meta property="og:url" content="https://junhee-ko.github.io/2019/12/30/big-data-chapter2/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="1. 크로스 집계크로스 집계  크로스 테이블행과 열이 교차하는 부분에 숫자 데이터가 들어감  트랜젝션 테이블행방향으로만 증가하고, 열방향으로는 데이터가 증가하지 않음  크로스 집계트레젝션 테이블에서 크로스 테이블로 변환하는 과정.피봇 테이블을 이용해서 할 수 있다.   룩업 테이블트랜젝션 테이블의 ‘상품 ID’ 를 사용해서 ‘상품명’ 과 ‘상품 카테고리’"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_cross_table.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_rdb_table.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_star_scheme.png"><meta property="og:image" content="https://junhee-ko.github.io/image/bigdata_dimension.png"><meta property="article:published_time" content="2019-12-29T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.845Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/bigdata_cross_table.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2019/12/30/big-data-chapter2/"},"headline":"[빅데이터를 지탱하는 기술] 2장_빅데이터 탐색","image":["https://junhee-ko.github.io/image/bigdata_cross_table.png","https://junhee-ko.github.io/image/bigdata_rdb_table.png","https://junhee-ko.github.io/image/bigdata_star_scheme.png","https://junhee-ko.github.io/image/bigdata_dimension.png"],"datePublished":"2019-12-29T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.845Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"1. 크로스 집계크로스 집계  크로스 테이블행과 열이 교차하는 부분에 숫자 데이터가 들어감  트랜젝션 테이블행방향으로만 증가하고, 열방향으로는 데이터가 증가하지 않음  크로스 집계트레젝션 테이블에서 크로스 테이블로 변환하는 과정.피봇 테이블을 이용해서 할 수 있다.   룩업 테이블트랜젝션 테이블의 ‘상품 ID’ 를 사용해서 ‘상품명’ 과 ‘상품 카테고리’"}</script><link rel="canonical" href="https://junhee-ko.github.io/2019/12/30/big-data-chapter2/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2019-12-29T15:00:00.000Z" title="12/30/2019, 12:00:00 AM">2019-12-30</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.845Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/big-data/">Big Data</a></span></div></div><h1 class="title is-3 is-size-4-mobile">[빅데이터를 지탱하는 기술] 2장_빅데이터 탐색</h1><div class="content"><h2 id="1-크로스-집계"><a href="#1-크로스-집계" class="headerlink" title="1. 크로스 집계"></a>1. 크로스 집계</h2><h5 id="크로스-집계"><a href="#크로스-집계" class="headerlink" title="크로스 집계"></a>크로스 집계</h5><p><img src="/image/bigdata_cross_table.png"></p>
+<ol>
+<li><p>크로스 테이블<br>행과 열이 교차하는 부분에 숫자 데이터가 들어감</p>
+</li>
+<li><p>트랜젝션 테이블<br>행방향으로만 증가하고, 열방향으로는 데이터가 증가하지 않음</p>
+</li>
+<li><p>크로스 집계<br>트레젝션 테이블에서 크로스 테이블로 변환하는 과정.<br>피봇 테이블을 이용해서 할 수 있다.</p>
+</li>
+</ol>
+<h5 id="룩업-테이블"><a href="#룩업-테이블" class="headerlink" title="룩업 테이블"></a>룩업 테이블</h5><p>트랜젝션 테이블의 ‘상품 ID’ 를 사용해서 ‘상품명’ 과 ‘상품 카테고리’ 참고할 때 사용되는 것이, 룩업 테이블이다.<br>상품 정보를 하나의 테이블로 정리해두면 나중에 속성을 추가하거나 변경하는 것도 간단하다.</p>
+<h2 id="2-열-지향-스토리지"><a href="#2-열-지향-스토리지" class="headerlink" title="2. 열 지향 스토리지"></a>2. 열 지향 스토리지</h2><h5 id="처리량과-지연-시간"><a href="#처리량과-지연-시간" class="headerlink" title="처리량과 지연 시간"></a>처리량과 지연 시간</h5><ol>
+<li><p>처리량 ( throughput )<br>일정 시간에 처리할 수 있는 데이터의 양.<br>배치 처리 등 대규모 데이터 처리에서 중요시.</p>
+</li>
+<li><p>지연 ( latency )<br>데이터 처리가 끝날 때 까지의 대기 시간.<br>애드 혹 데이터 분석에서 중요시.</p>
+</li>
+</ol>
+<h5 id="데이터-처리의-지연"><a href="#데이터-처리의-지연" class="headerlink" title="데이터 처리의 지연"></a>데이터 처리의 지연</h5><p>데이터 처리의 응답이 빠르면, ‘지연이 적다’ 라고 한다. </p>
+<ol>
+<li><p>메모리<br>모든 데이터를 메모리에 올리는 것이다.</p>
+</li>
+<li><p>RDB<br>만일, 한 레코드의 크기가 500 바이트라고 하면, 천만 레코드의 경우 5 GB 가 된다.<br>이 정도면, MySQL 이나 PostgreSQL 같은 일반적인 RDB 가 데이터 마트로 적합하다.<br>RDB는 원래 지연이 적고 많은 클라이언트가 접속해도 성능이 나빠지지 않으므로 많은 사용자가 사용하는 실제 운영 환경의 데이터 마트로 적합하다.<br>하지만, RDB 는 메모리가 부족하면 급격히 성능이 저하된다.</p>
+</li>
+</ol>
+<h5 id="‘압축’-‘분산’-에-의해-지연-줄이기"><a href="#‘압축’-‘분산’-에-의해-지연-줄이기" class="headerlink" title="‘압축’, ‘분산’ 에 의해 지연 줄이기"></a>‘압축’, ‘분산’ 에 의해 지연 줄이기</h5><p>데이터를 가능한 작게 ‘압축’ 하고 여러 디스크에 ‘분산’ 함으로써 데이터 로드에 따른 지연을 줄일 수 있다.<br>분산된 데이터를 읽기 위해서는 멀티 코어를 활용해 디스크 I/O 를 병렬 처리하는 것이 효과적이다.<br>이런 아키텍쳐를 MPP (Massive Parallel Processing) 라고 한다.<br>대량 데이터를 분석하기 위해 데이터베이스에 널리 사용되고 있다.<br>ex ) Amazon Redshift, Google BigQuery</p>
+<h5 id="행-지향-열-지향-데이터베이스"><a href="#행-지향-열-지향-데이터베이스" class="headerlink" title="행 지향, 열 지향 데이터베이스"></a>행 지향, 열 지향 데이터베이스</h5><ol>
+<li><p>행 지향 데이터베이스<br>레코드 단위로 읽고 쓰기에 최적화.<br>테이블의 각 행을 하나의 덩어리로 디스크에 저장.<br>새 레코드 추가할 때마다 파일의 끝에 데이터를 쓸 뿐이여서 빠르게 추가 가능.<br>데이터 검색을 고속화하기 위해 인덱스 사용.<br>데이터 분석에서는 어떤 칼럼 사용될지 미리 알 수 없으므로, 인덱스를 작성해도 도움이 되지 않음.<br>ex ) Oracble, MySQL</p>
+</li>
+<li><p>열 지향 데이터베이스<br>칼럼 단위의 집계에 최적화.<br>데이터를 미리 칼럼 단위로 정리해서 필요한 칼럼만을 로드하여 디스크 I/O 를 줄임.<br>같은 칼럼에는 종종 유사한 데이터가 나열되어서 데이터 압축 효율도 우수.<br>ex ) Teradata, Amazon Redshift</p>
+</li>
+</ol>
+<h5 id="MPP-데이터베이스"><a href="#MPP-데이터베이스" class="headerlink" title="MPP 데이터베이스"></a>MPP 데이터베이스</h5><ol>
+<li><p>행 지향 데이터베이스<br>하나의 쿼리는 하나의 스레드에서 실행.<br>하나의 쿼리가 충분히 짧은 시간에 끝나는 것으로 가정하므로 하나의 쿼리를 분산 처리하는 상황은 가정하지 않음.</p>
+</li>
+<li><p>열 지향 데이터베이스<br>디스크에서 대량의 데이터를 읽기 때문에 한 번의 쿼리 실행 시간이 길다.<br>멀티 코어를 활용해서 고속화 하는것이 좋음.</p>
+</li>
+</ol>
+<p>MPP 에서는 하나의 쿼리를 다수의 태스크로 분해하고, 이를 가능한 한 병렬로 수행한다.<br>예를 들어,</p>
+<ol>
+<li>1억 래코드로 이루어진 테이블의 합계를 계산하기 위해</li>
+<li>10만 레코드로 구분하여 1000 개의 테스크로 나눈다.</li>
+<li>각 테스크는 각각 독립적으로 10 만 레코드의 합계를 집계해서 </li>
+<li>마지막 모든 결과를 모아 총 합계를 계산한다.</li>
+</ol>
+<p>MPP 를 사용한 데이터 집계는 CPU 코어수에 비례해서 고속화된다.<br>단, 디스크로부터의 로드가 병목 현상이 발생하지 않도록 데이터가 고르게 분산되어 있어야한다. </p>
+<h2 id="3-애드-혹-분석과-시각화-도구"><a href="#3-애드-혹-분석과-시각화-도구" class="headerlink" title="3. 애드 혹 분석과 시각화 도구"></a>3. 애드 혹 분석과 시각화 도구</h2><ol>
+<li>Jupyter Notebook</li>
+<li>Redash</li>
+<li>Superset</li>
+<li>Kibana</li>
+</ol>
+<h2 id="4-데이터-마트의-기본-구조"><a href="#4-데이터-마트의-기본-구조" class="headerlink" title="4. 데이터 마트의 기본 구조"></a>4. 데이터 마트의 기본 구조</h2><h5 id="다차원-모델과-OLAP-큐브"><a href="#다차원-모델과-OLAP-큐브" class="headerlink" title="다차원 모델과 OLAP 큐브"></a>다차원 모델과 OLAP 큐브</h5><ol>
+<li><p>RDB<br>표 형식으로 모델링된 데이터를 SQL 로 집계한다.</p>
+</li>
+<li><p>OLAP<br>다차원 모델의 데이터 구조를, MDX (Multidimensional Exrepssions) 등의 쿼리 언어로 집계한다.</p>
+</li>
+</ol>
+<p>데이터 분석을 위해 만들어진 다차원의 데이터를 OLAP 큐브라고 한다. OLAP 큐브를 크로스 집계하는 구조가 OALP 이다.<br>컴퓨터 성능이 높지 않을 때는, 크로스 집계의 모든 조합을 데이터 베이스 안에 캐쉬해두고, 쿼리가 실행되면 이미 집계된 결과를 반환하는 구조였다.<br>최근에는 MPP 데이터베이스와 인 메모리 데이터베이스로, 사전에 계산해 둘 필요가 없다. MPP 데이터베이스에 다차원 모델의 개념이 없기 때문에, 이를 대신해 ‘비정규화 테이블’ 을 준비한다. 비정규화 테이블을 BI 도구에서 열어서 기존의 OLAP 과 동등한 시각화를 실현할 수 있다.</p>
+<h5 id="트렌젝션-마스터-테이블"><a href="#트렌젝션-마스터-테이블" class="headerlink" title="트렌젝션, 마스터 테이블"></a>트렌젝션, 마스터 테이블</h5><p><img src="/image/bigdata_rdb_table.png"></p>
+<ol>
+<li><p>트랜젝션 테이블<br>시간과 함께 생성되는 데이터들을 기록</p>
+</li>
+<li><p>마스터 테이블<br>트랜젝션에서 참고되는 각종 정보를 기록</p>
+</li>
+</ol>
+<h5 id="팩트-디맨젼-테이블"><a href="#팩트-디맨젼-테이블" class="headerlink" title="팩트, 디맨젼 테이블"></a>팩트, 디맨젼 테이블</h5><ol>
+<li><p>팩트 테이블<br>트랜젝션 테이블 처럼, 사실이 기록된 것.<br>집계의 기반이 되는 숫자 데이터 등.</p>
+</li>
+<li><p>디멘젼 테이블<br>마스터 테이블 처럼, 참고되는 마스터 데이터.<br>데이터를 분류하기 위한 속성 값.</p>
+</li>
+</ol>
+<h5 id="스타-스키마"><a href="#스타-스키마" class="headerlink" title="스타 스키마"></a>스타 스키마</h5><p><img src="/image/bigdata_star_scheme.png"></p>
+<p>데이터 마트를 만들때는, 팩트 테이블을 중심으로 여러 디멘젼 테이블을 결합하는 것이 좋다.<br>스타 스키마를 사용하는 이유는,</p>
+<ol>
+<li>단순하고 이해하기 쉬워 데이터 분석이 쉽다.</li>
+<li>성능 상의 이유<br>데이터 양이 증가하면 팩트 테이블은 디멘젼 테이블보다 훨씬 커져, 팩트 테이브이 메모리 용량을 초과한 시점에 디스크 I/O 가 발생하고 그 대기 시간으로 쿼리의 지연으로 이어진다.<br>그래서, 팩트 테이블에는 id 와 같은 키만을 남겨두고 그 이외의 나머지는 디멘젼 테이블로 옮긴다.</li>
+</ol>
+<h5 id="비정규화-테이블"><a href="#비정규화-테이블" class="headerlink" title="비정규화 테이블"></a>비정규화 테이블</h5><p>스타 스키마는 과거의 이야기이다. 성능 상의 문제는 열 지향 스토리지에 의해 해결된다.<br>MPP 데이터베이스와 같은 열 지향 스토리지의 보급으로, 칼럼의 수가 아무리 늘어나도 성능에 영향이 없다.<br>그래서, 처음부터 팩트 테이블에 모든 칼럼을 포함하고 쿼리의 실행 시에는 테이블 결합을 하지 않는 것이 간단하다.<br>스타 스키마에 비정규화를 진행해 모든 테이블을 결합한 팩트 테이블을 비정규화 테이블이라고 한다.</p>
+<h5 id="테이블-추상화"><a href="#테이블-추상화" class="headerlink" title="테이블 추상화"></a>테이블 추상화</h5><p><img src="/image/bigdata_dimension.png"></p>
+<p>비정규화 테이블을 준비했으면, 다차원 모델에 의해 추상화한다.<br>다차원 모델은 칼럼을 디멘젼과 측정값으로 분류한다. </p>
+<ol>
+<li><p>디멘젼<br>주로 날짜 및 문자열.<br>크로스 집계의 행이나 열로 사용</p>
+</li>
+<li><p>측정값<br>주로 숫자값.</p>
+</li>
+</ol>
+<hr>
+<p>빅데이터를 지탱하는 기술 &lt;니시다 케이스케&gt;</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[빅데이터를 지탱하는 기술] 2장_빅데이터 탐색</p><p><a href="https://junhee-ko.github.io/2019/12/30/big-data-chapter2/">https://junhee-ko.github.io/2019/12/30/big-data-chapter2/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2019-12-30</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2019/12/30/big-data-chapter1/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[빅데이터를 지탱하는 기술] 1장_빅데이터 기초 지식</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2019/12/30/big-data-chapter3/"><span class="level-item">[빅데이터를 지탱하는 기술] 3장_빅데이터 분산처리</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

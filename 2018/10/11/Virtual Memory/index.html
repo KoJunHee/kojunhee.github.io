@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Virtual Memory - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="출처 : 이화여자대학교 반효경 (http:&amp;#x2F;&amp;#x2F;www.kocw.net&amp;#x2F;home&amp;#x2F;search&amp;#x2F;kemView.do?kemId&amp;#x3D;1046323) Demand Paging  실제로 필요할 때 page를 메모리에 올리는 것  I&amp;#x2F;O양의 감소 Memory 사용량 감소 빠른 응답 시간 더 많은 사용자 수용   Valid &amp;#x2F; Invalid bit의 사용  Valid 사용되지"><meta property="og:type" content="blog"><meta property="og:title" content="Virtual Memory"><meta property="og:url" content="https://junhee-ko.github.io/2018/10/11/Virtual%20Memory/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="출처 : 이화여자대학교 반효경 (http:&amp;#x2F;&amp;#x2F;www.kocw.net&amp;#x2F;home&amp;#x2F;search&amp;#x2F;kemView.do?kemId&amp;#x3D;1046323) Demand Paging  실제로 필요할 때 page를 메모리에 올리는 것  I&amp;#x2F;O양의 감소 Memory 사용량 감소 빠른 응답 시간 더 많은 사용자 수용   Valid &amp;#x2F; Invalid bit의 사용  Valid 사용되지"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP01.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP02.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP03.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP04.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP05.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP06.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP07.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP08.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP09.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP10.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP11.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP12.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP13.png"><meta property="og:image" content="https://junhee-ko.github.io/image/demandP14.png"><meta property="article:published_time" content="2018-10-10T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.819Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/demandP01.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2018/10/11/Virtual%20Memory/"},"headline":"Virtual Memory","image":["https://junhee-ko.github.io/image/demandP01.png","https://junhee-ko.github.io/image/demandP02.png","https://junhee-ko.github.io/image/demandP03.png","https://junhee-ko.github.io/image/demandP04.png","https://junhee-ko.github.io/image/demandP05.png","https://junhee-ko.github.io/image/demandP06.png","https://junhee-ko.github.io/image/demandP07.png","https://junhee-ko.github.io/image/demandP08.png","https://junhee-ko.github.io/image/demandP09.png","https://junhee-ko.github.io/image/demandP10.png","https://junhee-ko.github.io/image/demandP11.png","https://junhee-ko.github.io/image/demandP12.png","https://junhee-ko.github.io/image/demandP13.png","https://junhee-ko.github.io/image/demandP14.png"],"datePublished":"2018-10-10T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.819Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"출처 : 이화여자대학교 반효경 (http:&#x2F;&#x2F;www.kocw.net&#x2F;home&#x2F;search&#x2F;kemView.do?kemId&#x3D;1046323) Demand Paging  실제로 필요할 때 page를 메모리에 올리는 것  I&#x2F;O양의 감소 Memory 사용량 감소 빠른 응답 시간 더 많은 사용자 수용   Valid &#x2F; Invalid bit의 사용  Valid 사용되지"}</script><link rel="canonical" href="https://junhee-ko.github.io/2018/10/11/Virtual%20Memory/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-10T15:00:00.000Z" title="10/11/2018, 12:00:00 AM">2018-10-11</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.819Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/os/">OS</a></span></div></div><h1 class="title is-3 is-size-4-mobile">Virtual Memory</h1><div class="content"><p>출처 : 이화여자대학교 반효경 (<a target="_blank" rel="noopener" href="http://www.kocw.net/home/search/kemView.do?kemId=1046323">http://www.kocw.net/home/search/kemView.do?kemId=1046323</a>)</p>
+<h2 id="Demand-Paging"><a href="#Demand-Paging" class="headerlink" title="Demand Paging"></a>Demand Paging</h2><p><img src="/image/demandP01.png"></p>
+<ul>
+<li><p>실제로 필요할 때 page를 메모리에 올리는 것</p>
+<ul>
+<li>I/O양의 감소</li>
+<li>Memory 사용량 감소</li>
+<li>빠른 응답 시간</li>
+<li>더 많은 사용자 수용</li>
+</ul>
+</li>
+<li><p>Valid / Invalid bit의 사용</p>
+<ul>
+<li>Valid<ul>
+<li>사용되지 않는 주소 영역인 경우</li>
+<li>페이지가 물리적 메모리에 없는 경우</li>
+</ul>
+</li>
+<li>처음에는 모든 page entry 가 invalid로 초기화</li>
+<li>address translation 시에 invalid bit이 set되어 있으면 “page fault”<ul>
+<li>요청한 페이지가 메모리에 없는 경우</li>
+<li>운영체제가 CPU를 가지고 fault난 페이지를 메모리에 올림 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Page-Fault"><a href="#Page-Fault" class="headerlink" title="Page Fault"></a>Page Fault</h2><p>요청한 페이지가 메모리에 없는 경우입니다. page fault가 나면 운영체제는 fault난 페이지를 메모리에 올립니다.</p>
+<p><img src="/image/demandP02.png"></p>
+<ul>
+<li>invalid page를 접근하면 MMU가 trap을 발생시키고 (page fault trap)<ul>
+<li>Kernel mode로 들어가서 page fault handler 가 invoke 됨</li>
+</ul>
+</li>
+<li>다음과 같은 순서로 page fault 를 처리<ul>
+<li>invalid reference? (eg. bad address, protection violation) =&gt; abort process<ul>
+<li>잘못된 요청인지 아닌지 체크하는 것</li>
+</ul>
+</li>
+<li>get an empty page frame (replace : 없으면 뺏어온다)</li>
+<li>해당 페이지를 disk 에서 memory로 읽어온다<ul>
+<li>disk I/O가 끝나기까지 이 프로세스는 CPU를 preempt 당함 (block)</li>
+<li>Dist read가 끝나면 page tables entry 기록, valid/invalid bit = “valid”</li>
+<li>ready queue에 process를 insert -&gt; dispatch later</li>
+</ul>
+</li>
+<li>이 프로세스가 CPU를 잡고 다시 running</li>
+<li>아까 중단되었던 instruction 재개</li>
+</ul>
+</li>
+</ul>
+<h2 id="Page-Replacement"><a href="#Page-Replacement" class="headerlink" title="Page Replacement"></a>Page Replacement</h2><p>page fault 가 났을 때, 원하는 페이지를 backing area에서 가져오게 됩니다. 만약, 물리 메모리가 모두 사용중인 상황이라면, 페이지 교체가 일어나야합니다.</p>
+<p><img src="/image/demandP03.png"></p>
+<ul>
+<li>Page replacement<ul>
+<li>어떤 frame을 빼앗아 올지 결정</li>
+<li>곧바로 사용되지 않을 page를 쫗아내는 것이 좋음</li>
+<li>동일한 페이지가 여러번 메모리에서 쫓겨났다가 다시 들어올 수 있음</li>
+</ul>
+</li>
+<li>Replacement Algoritm<ul>
+<li>page fault rate을 최소화 하는 것이 목표</li>
+<li>알고리즘을 평가 : 주어진 page reference string에 대해 page fault를 얼마나 내는지 조사</li>
+</ul>
+</li>
+</ul>
+<h2 id="Optimal-Algorithm"><a href="#Optimal-Algorithm" class="headerlink" title="Optimal Algorithm"></a>Optimal Algorithm</h2><p><img src="/image/demandP04.png"></p>
+<ul>
+<li>미래에 참조되는 페이지들을 미리 다 안다고 가정 : Offiline algorithm</li>
+<li>가장 먼 미래에 참조되는 페이지를 replace<ul>
+<li>네모칸 : 메모리</li>
+<li>빨간색 : 페이지 폴트 난 경우</li>
+<li>연보라 : 페이지 폴트 나지 않고 이미 메모리에 올라가 있는 경우</li>
+</ul>
+</li>
+<li>5번이 처음으로 참조 되는 경우<ul>
+<li>1번이 바로 다음으로 참조되기 때문에, 메모리에서 쫓겨나지 않아</li>
+<li>4번이 가장 먼 미래에 참조되기 때문에, 4번이 쫓겨나</li>
+</ul>
+</li>
+</ul>
+<h2 id="FIFO-Algorithm"><a href="#FIFO-Algorithm" class="headerlink" title="FIFO Algorithm"></a>FIFO Algorithm</h2><p><img src="/image/demandP05.png"></p>
+<p>메모리에 먼저 들어온 것을 먼저 내쫓음</p>
+<p>FIFO Anomaly : 메모리 크기 들어나면 성능이 안좋아져</p>
+<h2 id="LRU-Least-Recently-Used-Algorithm"><a href="#LRU-Least-Recently-Used-Algorithm" class="headerlink" title="LRU(Least Recently Used) Algorithm"></a>LRU(Least Recently Used) Algorithm</h2><p><img src="/image/demandP06.png"></p>
+<p>가장 오래전에 참조된 것을 지움</p>
+<ul>
+<li>5번이 처음으로 참조 되는 경우를 보면,<ul>
+<li>2번이 가장 최근에 참조</li>
+<li>그 다음에 1번, 4번</li>
+<li>가장 오래 전에 참조된 것이 3번</li>
+</ul>
+</li>
+</ul>
+<h2 id="LFU-Least-Frequently-Used-Algorithm"><a href="#LFU-Least-Frequently-Used-Algorithm" class="headerlink" title="LFU (Least Frequently Used) Algorithm"></a>LFU (Least Frequently Used) Algorithm</h2><p>참조 횟수가 가장 적은 페이지를 지움</p>
+<ul>
+<li>최저 참조 횟수인 page가 여럿 있는 경우<ul>
+<li>여러 page 중 임의로 선정</li>
+<li>선능 향상을 위해 가장 오래 전에 참조된 page를 지우게 구현할 수도 있다</li>
+</ul>
+</li>
+</ul>
+<h2 id="LRU-LFU-비교"><a href="#LRU-LFU-비교" class="headerlink" title="LRU / LFU 비교"></a>LRU / LFU 비교</h2><p><img src="/image/demandP07.png"></p>
+<ul>
+<li>LRU<ul>
+<li>1번이 가장 오래 전에 참조되긴 했지만,</li>
+<li>과거에 많은 참조가 있었다는 것을 무시</li>
+</ul>
+</li>
+<li>LFU<ul>
+<li>비록 4번이 참조횟수가 한 번이지만</li>
+<li>이제 막 참조가 시작되는 걸 쫓아냄</li>
+</ul>
+</li>
+</ul>
+<h2 id="LRU-LFU-구현"><a href="#LRU-LFU-구현" class="headerlink" title="LRU / LFU 구현"></a>LRU / LFU 구현</h2><p><img src="/image/demandP08.png"></p>
+<p><img src="/image/demandP09.png"></p>
+<ul>
+<li>LRU<ul>
+<li>어떤 페이지가 참조될 때마다 그 페이지를 제일 아래 쪽에 매달고</li>
+<li>쫓아낼 때는 제일 위에 있는걸 쫓아내</li>
+</ul>
+</li>
+<li>LFU<ul>
+<li>참조 횟수 1이 늘어나면</li>
+<li>비교를 해서 어디까지 내려갈 수 있는지 체크 (min-heap으로 구현)</li>
+</ul>
+</li>
+</ul>
+<h2 id="Caching"><a href="#Caching" class="headerlink" title="Caching"></a>Caching</h2><ul>
+<li>캐슁 기법<ul>
+<li>한정된 빠른 공강(cache)에 요청된 데이터를 저장해 두었다가 후속 요청히 캐쉬로부터 직접 서비스</li>
+<li>paging sytem 외에도 cache memory, buffer caching, Web caching등 다양한 분야에 사용</li>
+</ul>
+</li>
+<li>시간 제약<ul>
+<li>교체 알고리즘에서 삭제할 항목을 결정하는 일에 지나치게 많은 시간이 걸리는 경우 실제 시스템에서 사용할 수 없음</li>
+<li>Buffer caching 이나 Web caching인 경우<ul>
+<li>O(1) 에서 O(logn) 정도까지 허용</li>
+</ul>
+</li>
+<li>Pagin System 인 경우<ul>
+<li>page fault 인 경우에만 OS가 관여</li>
+<li>페이지가 이미 메모리에 존재하는 경우 참조 시각등의 정보를 OS가 알 수 없음</li>
+<li>O(1)인 LRU의 list 조작 조차 불가능 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Paging-System에서-LRU-LFU-가능한가"><a href="#Paging-System에서-LRU-LFU-가능한가" class="headerlink" title="Paging System에서 LRU, LFU 가능한가?"></a>Paging System에서 LRU, LFU 가능한가?</h2><p><img src="/image/demandP10.png"></p>
+<ul>
+<li><p>page fault가 발생하면, trap 발생하여 CPU 제어권이 OS에게 넘어가</p>
+<ul>
+<li><p>OS가 LRU 알고리즘을 사용한다면, OS가 가장 오래 전에 참조된 페이지를 알 수 있는가? NO</p>
+</li>
+<li><p>OS가 LFU 알고리즘을 사용한다면, OS가 가장 참조 횟수가 적은 페이지를 알 수 있는가? NO</p>
+</li>
+</ul>
+</li>
+<li><p>프로세스가 요청한 페이지가 이미 메모리에 올라와있으면 </p>
+<ul>
+<li>운영체제에게 CPU가 넘어가지 않고</li>
+<li>하드웨어적으로 주소 변환해서 CPU가 바로 읽어들여</li>
+<li>그러면 이 페이지의 접근 시간을 운영체제는 몰라</li>
+</ul>
+</li>
+</ul>
+<h2 id="Clock-Algorithm"><a href="#Clock-Algorithm" class="headerlink" title="Clock Algorithm"></a>Clock Algorithm</h2><p><img src="/image/demandP11.png"></p>
+<ul>
+<li><p>LRU의 근사 알고리즘</p>
+</li>
+<li><p>여러 명칭</p>
+<ul>
+<li>Second chance algorithm</li>
+<li>NUR ( Not Used Recently)</li>
+<li>NRU ( Not Recently Used)</li>
+</ul>
+</li>
+<li><p>Reference bit을 사용해서 교체 대상 페이지 선정 (circular list)</p>
+<ul>
+<li>Reference bit가 0 인 것을 찾을 때 까지 포인터를 하나씩 앞으로 이동</li>
+<li>포인터 이동하는 중에 reference bit 1은 모두 0으로 바꿈</li>
+<li>reference bit 이 0인 것을 찾으면 그 페이지를 교체</li>
+<li>한 바퀴 되돌아와서도 (second chance) 0이면 그때에는 replace 당함</li>
+<li>자주 사용되는 페이지라면 second chance가 올 때 1</li>
+</ul>
+</li>
+<li><p>개선</p>
+<ul>
+<li>reference bit과 modified bit (dirty bit)을 함께 사용</li>
+<li>reference bit ==1 : 최근에 참조된 페이지</li>
+<li>modified bit == 1 : 최근에 변경된 페이지 ( I/O를 동반하는 페이지 )</li>
+</ul>
+</li>
+<li><p>사각형 </p>
+<ul>
+<li>페이지 프레임</li>
+<li>물리적인 메모리에 들어있는 페이지</li>
+</ul>
+</li>
+<li><p>reference bit가 1이면 최근에 참조되 페이지이기 때문에 0으로 바꾸고 다음으로 넘어가</p>
+</li>
+<li><p>어떤 페이지를 쫓아내야하는데, modified bit가 1이면 </p>
+<ul>
+<li>그 페이지는 메모리에 올라온 이후로 적어도 한 번은 CPU에서 write를 한것. 내용을 수정한 것. </li>
+<li>이 페이지를 메모리로부터 쫓겨낼 때는 backing store에 수정된 내용을 반영하고 쫓아내.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Page-Frame의-Allocation"><a href="#Page-Frame의-Allocation" class="headerlink" title="Page Frame의 Allocation"></a>Page Frame의 Allocation</h2><p>각 프로세스에 얼만큼의 page frame을 할당할 것인가.</p>
+<ul>
+<li>Equal allocation<ul>
+<li>모든 프로세스에 똑같은 개수 할당</li>
+</ul>
+</li>
+<li>Proportional allocation<ul>
+<li>프로세스 크기에 비례하여 할당</li>
+</ul>
+</li>
+<li>Priority allocation<ul>
+<li>프로세스의 priority 에 따라 다르게 할당</li>
+</ul>
+</li>
+</ul>
+<h2 id="Global-vs-Local-Replacement"><a href="#Global-vs-Local-Replacement" class="headerlink" title="Global vs Local Replacement"></a>Global vs Local Replacement</h2><ul>
+<li><p>Globlal replacement</p>
+<ul>
+<li><p>다른 프로그램의 페이지도 쫓아낼 수 있음</p>
+</li>
+<li><p>replace 시 다른 프로세스에 할당된 frame을 빼앗아 올 수 있다</p>
+</li>
+<li><p>프로세스별 할당량을 조절하는 또 다른 방법</p>
+</li>
+<li><p>FIFO, LRU, LFU 등의 알고리즘을 globla replacement 사용시에 해당</p>
+</li>
+<li><p>working set / PFF 알고리즘 사용</p>
+</li>
+</ul>
+</li>
+<li><p>Local replacement</p>
+<ul>
+<li>자신에게 할당된 frame 내에서만 replacement</li>
+<li>FIFO, LRU, LFU 등의 알고리즘을 프로세스 별로 운영시</li>
+</ul>
+</li>
+</ul>
+<h2 id="Thrashing"><a href="#Thrashing" class="headerlink" title="Thrashing"></a>Thrashing</h2><p><img src="/image/demandP12.png"></p>
+<ul>
+<li><p>프로세스의 원활한 수행에 필요한 최소한의 page frame 수를 할당 받지 못한 경우 발생</p>
+<ul>
+<li><p>pafe fault rate이 매우 높아짐</p>
+</li>
+<li><p>CPU utilization이 매우 낮아짐</p>
+</li>
+</ul>
+</li>
+<li><p>OS는 MPF (Multiprogramming degree)를 높여야 한다고 판단</p>
+<ul>
+<li><p>또 다른 프로세스가 시스템에 추가됨 (higher MPD)</p>
+</li>
+<li><p>프로세스 당 할당된 프레임의 수가 더욱 감소</p>
+</li>
+<li><p>프로세스는 페이지의 swap in / swap out 으로 매우 바쁨</p>
+</li>
+<li><p>대부분의 시간에 CPU는 한가함</p>
+</li>
+<li><p>low throughput</p>
+</li>
+</ul>
+</li>
+<li><p>x 축</p>
+<ul>
+<li>지금 메모리에 올라와있는 프로그램의 개수</li>
+</ul>
+</li>
+<li><p>프로그램 하나만 올라가 있으면 </p>
+<ul>
+<li>CPU utilizaiton이 낮아 =&gt; IO를 하러 가면, CPU는 놀아</li>
+</ul>
+</li>
+<li><p>계속해서 메모리에 올라와있는 프로그램의 개수 올리면 thrashing 발생</p>
+<ul>
+<li>CPU가 인스트럭션 수행하려고 하면 그 페이지게 메모리에 없어서 IO를 해</li>
+<li>또 다른 프로그램에게 CPU가 넘어가 또 요청한 페이지가 메모리에 없어서 IO를 해</li>
+</ul>
+</li>
+</ul>
+<h2 id="Working-Set-model"><a href="#Working-Set-model" class="headerlink" title="Working-Set model"></a>Working-Set model</h2><ul>
+<li>Locality of reference<ul>
+<li>프로세스는 특정 시간 동안 일정 장소만을 집중적으로 참조</li>
+<li>집중적으로 참조되는 해당 page들의 집합을 locality set이라 함</li>
+</ul>
+</li>
+<li>working set model<ul>
+<li>locality에 기반하여 프로세스가 일정 시간 동안 원활하게 수행되기 위해 한꺼번에 메모리에 올라와 있어야 하는 page들의 집합을 working set 이라 정의함</li>
+<li>working set 모델에서는 process의 working set 전체가 메모리에 올라와 있어야 수행되고 그렇지 않을 경우 모든 frame을 반납한 후 swap out(suspend)</li>
+<li>thrashing을 방지</li>
+<li>multiprogramming degree를 결정</li>
+</ul>
+</li>
+</ul>
+<h2 id="Working-Set-Algorithm"><a href="#Working-Set-Algorithm" class="headerlink" title="Working-Set Algorithm"></a>Working-Set Algorithm</h2><p><img src="/image/demandP13.png"></p>
+<p>Working set의 결정</p>
+<ul>
+<li>Wokring set window를 통해 알아냄</li>
+<li>과거 델타 시간(window) 동안 참조된 페이지들을 working set이라 간주해서 쫓아내지 않고 메모리에 유지</li>
+<li>참조된 후 델타 시간 동안 해당 Page를 메모리에 유지한 후 버림</li>
+</ul>
+<h2 id="PFF-Page-Fault-Frequency-Scheme"><a href="#PFF-Page-Fault-Frequency-Scheme" class="headerlink" title="PFF (Page-Fault Frequency) Scheme"></a>PFF (Page-Fault Frequency) Scheme</h2><p><img src="/image/demandP14.png"></p>
+<p>현재 시점에 page fault 얼마나 났는지 직접 봐. 프로그램이 pafe fault 얼마나 내는지 봐.</p>
+<ul>
+<li><p>이 프로그램이 pafe fault 많이 내고 있으면,  </p>
+<ul>
+<li><p>이 프로그램의 working set이 메모리에 보장되고 있지 않구나.</p>
+</li>
+<li><p>페이지를 더줘.</p>
+</li>
+</ul>
+</li>
+<li><p>pafe fault rate의 상한값과 하한값을 둔다</p>
+<ul>
+<li><p>pafe fault rate이 상한값을 넘으면 프레임을 더 할당</p>
+</li>
+<li><p>하한값 이하이면 프레임 수를 줄임</p>
+</li>
+</ul>
+</li>
+<li><p>빈 프레임이 없으면 일부 프로세스를 swap out</p>
+</li>
+</ul>
+<h2 id="Page-Size의-결정"><a href="#Page-Size의-결정" class="headerlink" title="Page Size의 결정"></a>Page Size의 결정</h2><ul>
+<li><p>Page size를 감소시키면</p>
+<ul>
+<li><p>페이지 수 증가</p>
+</li>
+<li><p>페이지 테이블 크기 중가</p>
+</li>
+<li><p>internal fragmentation 감소</p>
+</li>
+<li><p>Disk transfer 의 효율성 감소</p>
+</li>
+</ul>
+</li>
+<li><p>필요한 정보만 메모리에 올라와 메모리 이용이 효율적</p>
+<ul>
+<li>locality 활용 측면에서는 좋지 않음</li>
+</ul>
+</li>
+<li><p>trend</p>
+<ul>
+<li>Larger page size</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Virtual Memory</p><p><a href="https://junhee-ko.github.io/2018/10/11/Virtual Memory/">https://junhee-ko.github.io/2018/10/11/Virtual Memory/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2018-10-11</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2018/10/12/%EB%AC%B4%EC%84%A0%20%EC%B6%A9%EC%A0%84/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">무선 충전</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2018/10/11/%EB%94%94%EC%A0%80%ED%8A%B8%20%EC%B9%B4%ED%8E%98/"><span class="level-item">디저트 카페</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

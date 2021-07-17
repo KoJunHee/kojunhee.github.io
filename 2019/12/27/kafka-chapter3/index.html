@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[카프카] 3장_카프카 디자인 - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="카프카 디자인의 특징분산 시스템분산 시스템이란, 같은 역할을 하는 여러 대의 서버로 이뤄진 서버 그룹이다.장점은,  단일 시스템 보다 높은 성능 하나의 서버가 장애가 발생해도 다른 서버가 대신 처리 시스템 확장 용이  페이지 캐시OS 는 물리적 메모리에 애플리케이션이 사용하는 부분을 할당하고, 남은 잔여 메모리 일부를 페이지 케시로 이용한다.즉, 디스크에"><meta property="og:type" content="blog"><meta property="og:title" content="[카프카] 3장_카프카 디자인"><meta property="og:url" content="https://junhee-ko.github.io/2019/12/27/kafka-chapter3/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="카프카 디자인의 특징분산 시스템분산 시스템이란, 같은 역할을 하는 여러 대의 서버로 이뤄진 서버 그룹이다.장점은,  단일 시스템 보다 높은 성능 하나의 서버가 장애가 발생해도 다른 서버가 대신 처리 시스템 확장 용이  페이지 캐시OS 는 물리적 메모리에 애플리케이션이 사용하는 부분을 할당하고, 남은 잔여 메모리 일부를 페이지 케시로 이용한다.즉, 디스크에"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/kafka_topic.png"><meta property="og:image" content="https://junhee-ko.github.io/image/kafka_topic_with_partition.png"><meta property="og:image" content="https://junhee-ko.github.io/image/kafka_replication.png"><meta property="og:image" content="https://junhee-ko.github.io/image/kafka_example_01.png"><meta property="og:image" content="https://junhee-ko.github.io/image/kafka_example_02.png"><meta property="article:published_time" content="2019-12-26T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.867Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/kafka_topic.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2019/12/27/kafka-chapter3/"},"headline":"[카프카] 3장_카프카 디자인","image":["https://junhee-ko.github.io/image/kafka_topic.png","https://junhee-ko.github.io/image/kafka_topic_with_partition.png","https://junhee-ko.github.io/image/kafka_replication.png","https://junhee-ko.github.io/image/kafka_example_01.png","https://junhee-ko.github.io/image/kafka_example_02.png"],"datePublished":"2019-12-26T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.867Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"카프카 디자인의 특징분산 시스템분산 시스템이란, 같은 역할을 하는 여러 대의 서버로 이뤄진 서버 그룹이다.장점은,  단일 시스템 보다 높은 성능 하나의 서버가 장애가 발생해도 다른 서버가 대신 처리 시스템 확장 용이  페이지 캐시OS 는 물리적 메모리에 애플리케이션이 사용하는 부분을 할당하고, 남은 잔여 메모리 일부를 페이지 케시로 이용한다.즉, 디스크에"}</script><link rel="canonical" href="https://junhee-ko.github.io/2019/12/27/kafka-chapter3/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2019-12-26T15:00:00.000Z" title="12/27/2019, 12:00:00 AM">2019-12-27</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.867Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/kafka/">Kafka</a></span></div></div><h1 class="title is-3 is-size-4-mobile">[카프카] 3장_카프카 디자인</h1><div class="content"><h2 id="카프카-디자인의-특징"><a href="#카프카-디자인의-특징" class="headerlink" title="카프카 디자인의 특징"></a>카프카 디자인의 특징</h2><h3 id="분산-시스템"><a href="#분산-시스템" class="headerlink" title="분산 시스템"></a>분산 시스템</h3><p>분산 시스템이란, 같은 역할을 하는 여러 대의 서버로 이뤄진 서버 그룹이다.<br>장점은,</p>
+<ol>
+<li>단일 시스템 보다 높은 성능</li>
+<li>하나의 서버가 장애가 발생해도 다른 서버가 대신 처리</li>
+<li>시스템 확장 용이</li>
+</ol>
+<h3 id="페이지-캐시"><a href="#페이지-캐시" class="headerlink" title="페이지 캐시"></a>페이지 캐시</h3><p>OS 는 물리적 메모리에 애플리케이션이 사용하는 부분을 할당하고, 남은 잔여 메모리 일부를 페이지 케시로 이용한다.<br>즉, 디스크에 읽고 쓰기를 하지 않고 페이지 케시를 읽고 쓰는 방식으로 처리 속도가 빠르고 전체적인 성능을 향상 시킨다.</p>
+<h3 id="배치-전송-처리"><a href="#배치-전송-처리" class="headerlink" title="배치 전송 처리"></a>배치 전송 처리</h3><p>서버와 클라이언트 사이, 또는 서버 내부적으로 데이터를 주고 받는 과정에서 I/O 가 발생한다.<br>작은 I/O 가 빈번하게 발생하는 것을 막기 위해, 작은 I/O 들을 묶어러 처리할 수 있도록 배치 작업으로 처리한다.</p>
+<h2 id="카프카-데이터-모델"><a href="#카프카-데이터-모델" class="headerlink" title="카프카 데이터 모델"></a>카프카 데이터 모델</h2><h3 id="토픽"><a href="#토픽" class="headerlink" title="토픽"></a>토픽</h3><p>메세지를 받을 수 있도록 논리적으로 묶은 개념이다. 메일 주소라고 생각하면 쉽다.</p>
+<h3 id="파티션"><a href="#파티션" class="headerlink" title="파티션"></a>파티션</h3><p>토픽을 분할한 것이다.<br>아래 그림에서, ‘뉴스 토픽’ 으로 4 개의 메세지를 보내는데 4 초가 걸린다.</p>
+<p><img src="/image/kafka_topic.png"></p>
+<p>아래 그림에서, ‘뉴스 토픽’ 으로 4 개의 메세지를 보내는데 1 초가 걸린다.</p>
+<p><img src="/image/kafka_topic_with_partition.png"></p>
+<p>이렇게 빠른 전송을 위해서는, 토픽의 파티션 수와 프로듀서 수를 모두 늘려줘야한다.</p>
+<blockquote>
+<p>그러면, 무조건 파티션 수를 늘려야 하나 ?</p>
+</blockquote>
+<p>파티션 수가 늘어나면 카프카에 좋지 않은 영향을 끼칠 수 있다.</p>
+<ol>
+<li><p>파일 핸들러의 낭비<br>각 파티션은 브로커의 디렉토리와 매핑되고, 저장되는 데이터는 2 개의 파일 ( 인덱스, 실제 데이터 ) 이 있다.<br>파티션이 많을 수록, 파일 핸들 수 역시 많아져 리소스가 낭비가 될 수 있다.</p>
+</li>
+<li><p>장애 복구 시간 증가</p>
+</li>
+</ol>
+<blockquote>
+<p>그러면, 토픽의 적절한 파티션 수는 ?</p>
+</blockquote>
+<p>먼저, 원하는 목표 처리량의 기준을 정해야한다. </p>
+<ol>
+<li><p>프로듀서<br>4 개의 프로듀서가 초당 10 개의 메세지를 토픽으로 보내면, 토픽에서 초당 40 개의 메시지를 받아줘야한다.</p>
+</li>
+<li><p>토픽<br>해당 토픽에서 파티션을 1로 했을 때 초당 10개의 메세지만 받아준다면, 파티션 수를 4로 조정하면 목표치를 달성한다.</p>
+</li>
+<li><p>컨슈머<br>8 개의 컨슈머가 각각 초당 5 개의 메세지를 토픽에서 가져올 수 있으면, 토픽의 파티션수는 8개로 맞춰서 각 컨슈머마다 각각의 파티션에 접근하게 해줘야한다.<br>주의할 점은, 파티션 수를 늘리는 것은 가능하지만 파티션 수을 줄이는 것은 불가능하다.</p>
+</li>
+</ol>
+<h3 id="오프셋과-메세지-순서"><a href="#오프셋과-메세지-순서" class="headerlink" title="오프셋과 메세지 순서"></a>오프셋과 메세지 순서</h3><p>오프셋이란, 각 파티션마다 메세지가 저장되는 위치이다.<br>파티션 내에서 유일한 숫자이고, 순차적으로 증가한다.<br>만약 컨슈머가 파티션 0 에서 데이터를 가져간다고 하면, 오프셋 0 1 2 3 4 5 순서대로 가져갈 수 있다.<br>절대로 오프셋 순서가 바뀐 상태로 가져갈 수 없다.</p>
+<h2 id="고가용성과-리플리케이션"><a href="#고가용성과-리플리케이션" class="headerlink" title="고가용성과 리플리케이션"></a>고가용성과 리플리케이션</h2><p>토픽을 이루는 각각의 <code>파티션을</code> 리플리케이션 하는 것이다.</p>
+<h3 id="리플리케이션-팩터와-리더-팔로워의-역할"><a href="#리플리케이션-팩터와-리더-팔로워의-역할" class="headerlink" title="리플리케이션 팩터와 리더, 팔로워의 역할"></a>리플리케이션 팩터와 리더, 팔로워의 역할</h3><p><img src="/image/kafka_replication.png"></p>
+<p>위 그림은, 토픽이 replication-factor 2 로 생성된 상황이다.<br>모든 읽기와 쓰기는 리더를 통해서만 일어난다. 팔로워는 리더의 데이터를 그대로 리플리케이션만 한다.<br>리더와 팔로워는 저장된 데이터의 순서도 일치하고 동일한 오프셋과 메시지를 갖는다.<br>리플리케이션된 토픽의 서버가 다운되어도, 리더 변경으로 문제 없이 프로듀서의 요청을 처리할 수 있다.</p>
+<p>리플리케이션도 단점은 있다.</p>
+<ol>
+<li><p>디스크 사용량 증가<br>토픽의 사이즈가 100 GB, 리플리케이션 팩터 3 이면, 카프카 클러스터 내 필요 저장소 크기는 300 GB 이다.</p>
+</li>
+<li><p>브로커 리소스 사용량 증가<br>브로커는 리플리케이션 보장을 위해, 비활성화된 토픽이 리플리케이션을 잘하고 있는지 비활성화된 토픽을 계속 체크한다. </p>
+</li>
+</ol>
+<h3 id="리더와-팔로워의-관리"><a href="#리더와-팔로워의-관리" class="headerlink" title="리더와 팔로워의 관리"></a>리더와 팔로워의 관리</h3><p>팔로워에 문제가 있어서, 리더로부터 데이터를 가져오지 못하면 정합성이 맞지 않는다.<br>이를 해결하기 위해, ISR ( In Sync Replica ) 라는 개념이 있다. 현재 리플리케이션 되고 있는 리플리케이션 그룹이다.<br>ISR 에 속한 구성원만이 리더의 자격이 있다.<br>프로듀서 1, 브로커 3, 리플리케이션 팩터 3 일때, ISR 동작 순서는</p>
+<ol>
+<li>프로듀서가 메세지를 토픽의 리더에게 보낸다. </li>
+<li>리더는 메세지를 저장한다.</li>
+<li>팔로워는 매우 짧은 주기로 리더에 새로운 메세지가 저장된 것이 있는지 확인한다.</li>
+<li>팔로워 1은 잘 동작하고 2는 잘 동작하지 않는다고 가정하자.</li>
+<li>리더는 팔로워가 일정 주기 동안 확인 요청을 하지 않으면 그 팔로워를 ISR 그룹에서 추방한다.</li>
+<li>리더는 팔로워 2를 ISR 그룹에서 추방한다.</li>
+<li>팔로워 1은 리더에게 새로운 메세지가 있음을 확인하고 메세지를 가져가서 저장한다.</li>
+</ol>
+<h2 id="모든-브로커가-다운된다면"><a href="#모든-브로커가-다운된다면" class="headerlink" title="모든 브로커가 다운된다면"></a>모든 브로커가 다운된다면</h2><ol>
+<li><p>마지막 리더가 살아나기를 기다린다.<br>마지막 리더에게 모든 메세지가 저장되어 있을 때, 나중에 다시 살아난다면 메세지 손실이 없다.<br>하지만 마지막 리더가 살아나지 않는 경우가 있을 수 있고, 결국 마지막 리더가 정상화 될때 까지 카프카 클러스터 장애가 길어진다.</p>
+</li>
+<li><p>ISR 에서 추방되었지만 먼저 살아나면 자동으로 리더가 된다.<br>메세지가 일부 손실되지만, 브로커 하나만이라도 정상화되어 서비스가 빠르게 정상화된다.</p>
+</li>
+</ol>
+<h2 id="예시"><a href="#예시" class="headerlink" title="예시"></a>예시</h2><p>아래 그림은,<br>Broker 3 / Topic “jko01” / Partition 2 / Replication Factor 3    </p>
+<p><img src="/image/kafka_example_01.png"></p>
+<p>아래 그림은,<br>Broker 3 / Topic “jko02” / Partition 2 / Replication Factor 2</p>
+<p><img src="/image/kafka_example_02.png"></p>
+<hr>
+<p>카프카, 데이터 플랫폼의 최강자 &lt;고승범, 공용준&gt;</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[카프카] 3장_카프카 디자인</p><p><a href="https://junhee-ko.github.io/2019/12/27/kafka-chapter3/">https://junhee-ko.github.io/2019/12/27/kafka-chapter3/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2019-12-27</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2019/12/28/kafka-chapter4/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[카프카] 4장_카프카 프로듀서</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2019/12/27/object-chapter11/"><span class="level-item">[오브젝트] 11장_합성과 유연한 설계</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Always Learning"><meta property="og:url" content="https://junhee-ko.github.io/"><meta property="og:site_name" content="Always Learning"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/img/og_image.png"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io"},"headline":"Always Learning","image":["https://junhee-ko.github.io/img/og_image.png"],"author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":null}</script><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-05T15:00:00.000Z" title="10/6/2018, 12:00:00 AM">2018-10-06</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.830Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/os/">OS</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/10/06/Process%20Synchronization/">Process Sysncronization</a></h1><div class="content"><h5 id="데이터의-접근"><a href="#데이터의-접근" class="headerlink" title="데이터의 접근"></a>데이터의 접근</h5><p>데이터를 읽어와서 연산하고 다시 저장합니다.</p>
+<p><img src="/image/100601.png"></p>
+<h5 id="Race-Condition"><a href="#Race-Condition" class="headerlink" title="Race Condition"></a>Race Condition</h5><p>S-box를 공유하는 E-box가 여럿 있는 경우 Race Condition의 가능성이 있습니다.<br>ex) 커널 모드 수행 중 인터럽트로 커널모드 다른 루틴 수행시</p>
+<p><img src="/image/100602.png"></p>
+<h5 id="race-condition-1-3"><a href="#race-condition-1-3" class="headerlink" title="race condition (1/3)"></a>race condition (1/3)</h5><ul>
+<li>kernel 수행 중 인터럽트 발생</li>
+<li>커널모드 running 중 inetrrupt 발생하여 인터럽트 처리 루틴이 수행</li>
+<li>양쪽 다 커널 코드이므로 kernel address space 공유</li>
+</ul>
+<p><img src="/image/100603.png"></p>
+<h5 id="race-condition-2-3"><a href="#race-condition-2-3" class="headerlink" title="race condition (2/3)"></a>race condition (2/3)</h5></div><a class="article-more button is-small is-size-7" href="/2018/10/06/Process%20Synchronization/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-03T15:00:00.000Z" title="10/4/2018, 12:00:00 AM">2018-10-04</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.848Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/os/">OS</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/10/04/Process%20Managemnet/">Process Management</a></h1><div class="content"><p>출처 : 이화여자대학교 반효경 (<a target="_blank" rel="noopener" href="http://www.kocw.net/home/search/kemView.do?kemId=1046323">http://www.kocw.net/home/search/kemView.do?kemId=1046323</a>)</p>
+<h2 id="프로세스-생성"><a href="#프로세스-생성" class="headerlink" title="프로세스 생성"></a>프로세스 생성</h2><ul>
+<li>부모 프로세스가 자식 프로세스 생성</li>
+<li>프로세스의 트리(계층 구조) 생성</li>
+<li>프로세스는 자원을 필요로 함<ul>
+<li>운영체제로부터 받는다</li>
+<li>부모와 공유한다</li>
+</ul>
+</li>
+<li>주소 공간<ul>
+<li>자식은 부모의 공간을 복사</li>
+<li>자식은 그 공간에 새로운 프로그램을 올림</li>
+</ul>
+</li>
+<li>유닉스의 예 : 복제 생성하고 덮어씌움<ul>
+<li>fork() 시스템 콜이 새로운 프로세스를 복제 생성<ul>
+<li>부모를 그대로 복사</li>
+<li>주소 공간 할당</li>
+</ul>
+</li>
+<li>exec()<ul>
+<li>fork 다음에 이어지는  exec() 시스템 콜을 통해 새로운 프로그램을 메모리에 올림 (덮어 씌움)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="프로세스-종료"><a href="#프로세스-종료" class="headerlink" title="프로세스 종료"></a>프로세스 종료</h2><ul>
+<li>exit<ul>
+<li>exit 시스템 콜을 통해 프로세스가 마지막 명령을 수행한후 운영체제에게 이를 알려줌</li>
+<li>자식이 부모에게 output data를 보냄(via wait system call)</li>
+<li>프로세의 각종 자원들이 운영체제에게 반납됨</li>
+</ul>
+</li>
+<li>abort<ul>
+<li>부모 프로세스가 자식의 수행을 종료시킴</li>
+<li>자식이 할당 자원의 한계치를 넘어섬</li>
+<li>자식에게 할당된 테스크가 더 이사 필요하지 않음</li>
+<li>부모가 종료하는 경우<ul>
+<li>운영체제는 부모 프로세스가 종료하는 경우 자식이 더 이상 수행되도록 두지 않음</li>
+<li>단계적인 종료</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="fork-system-call"><a href="#fork-system-call" class="headerlink" title="fork() system call"></a>fork() system call</h2><p>왼쪽은 부모, 오른쪽은 자식. 자식은 fork() 이후의 라인부터 실행</p>
+<p><img src="/image/os100401.png"></p>
+<p><img src="/image/os100402.png"></p>
+<h2 id="exec-system-call"><a href="#exec-system-call" class="headerlink" title="exec() system call"></a>exec() system call</h2></div><a class="article-more button is-small is-size-7" href="/2018/10/04/Process%20Managemnet/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-03T15:00:00.000Z" title="10/4/2018, 12:00:00 AM">2018-10-04</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.817Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/10/04/%EB%B2%BD%EB%8F%8C%EA%B9%A8%EA%B8%B0/">벽돌깨기</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRQm6qfL0DFAUo&amp;categoryId=AWXRQm6qfL0DFAUo&amp;categoryType=CODE&amp;&amp;&amp;">https://www.swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRQm6qfL0DFAUo&amp;categoryId=AWXRQm6qfL0DFAUo&amp;categoryType=CODE&amp;&amp;&amp;</a></p>
+<p>어려운 문제는 아니다. 방향은 잡았는데, 코드로 구현하는데 오래 걸렸다.</p>
+<h2 id="풀이"><a href="#풀이" class="headerlink" title="풀이"></a>풀이</h2><ol>
+<li>구슬 선택 : DFS</li>
+<li>벽돌 깨기 : 재귀</li>
+</ol>
+<p>DFS는 다음 그림과 같이 진행한다. 구슬을 쏠 수 있는 칼럼은 0, 1, 2, 3 으로 4개가 있다고 하면,</p>
+<p><img src="/image/breakBrick02.png"></p>
+<p>재귀는 다음 그림과 같이 구현한다. 3을 기준으로 벽돌을 깬다고 하면, </p>
+<p>3 기준 동서남북을 체크한다. 3의 동쪽을 깨는 중에, 9가 나오기 때문에, 9 위치에서 다시 재귀 함수를 호출 한다.</p>
+<p><img src="/image/breakBrick01.png"></p>
+</div><a class="article-more button is-small is-size-7" href="/2018/10/04/%EB%B2%BD%EB%8F%8C%EA%B9%A8%EA%B8%B0/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-03T15:00:00.000Z" title="10/4/2018, 12:00:00 AM">2018-10-04</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.814Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/10/04/%EB%B3%B4%EB%AC%BC%EC%83%81%EC%9E%90%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8/">보물상자 비밀번호</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRUN9KfZ8DFAUo&amp;categoryId=AWXRUN9KfZ8DFAUo&amp;categoryType=CODE">https://www.swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRUN9KfZ8DFAUo&amp;categoryId=AWXRUN9KfZ8DFAUo&amp;categoryType=CODE</a></p>
+<p>쉬운 문제이다. 이 문제에서는 정렬과 진법 변환을 배울 수 있다.</p>
+<h2 id="풀이"><a href="#풀이" class="headerlink" title="풀이"></a>풀이</h2><ol>
+<li>회전 시키고</li>
+<li>각 변 확인하며 리스트에 저장</li>
+</ol>
+<h2 id="개념"><a href="#개념" class="headerlink" title="개념"></a>개념</h2><ol>
+<li><p>정렬</p>
+<p>오름차순 정렬 : Collections.sort(list)</p>
+<p>내림차순 정렬 : Collections.sort(list) –&gt;  Collections.reverse(list)</p>
+</li>
+<li><p>진법 변환</p>
+<p>string 을 radix 진법으로 변환 : Integer.parseInt(String s, int radix) </p>
+</li>
+</ol>
+<h2 id="코드"><a href="#코드" class="headerlink" title="코드"></a>코드</h2><p><img src="/image/treasurepwd01.png"></p>
+<p><img src="/image/treasurepwd02.png"></p>
+</div><a class="article-more button is-small is-size-7" href="/2018/10/04/%EB%B3%B4%EB%AC%BC%EC%83%81%EC%9E%90%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2018-10-02T15:00:00.000Z" title="10/3/2018, 12:00:00 AM">2018-10-03</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.817Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/os/">OS</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/10/03/Process/">Process</a></h1><div class="content"><h5 id="Process란"><a href="#Process란" class="headerlink" title="Process란 ?"></a>Process란 ?</h5><p>실행중인 프로그램입니다. 메모리에 적재되어 CPU 할당을 받을 수 있습니다.</p>
+<p><img src="/image/100201.png"></p>
+<h5 id="Context란"><a href="#Context란" class="headerlink" title="Context란 ?"></a>Context란 ?</h5><p>CPU 수행상태를 나타내는 하드웨어 문맥입니다.</p>
+<h5 id="프로세스의-상태-Process-State-란"><a href="#프로세스의-상태-Process-State-란" class="headerlink" title="프로세스의 상태 (Process State) 란 ?"></a>프로세스의 상태 (Process State) 란 ?</h5><p>프로세스는 상태가 변경되며 수행됩니다.</p>
+<ol>
+<li>Running<br>CPU를 잡고 instruction을 수행중인 상태입니다.</li>
+<li>Ready<br>메모리 등 다른 조건을 모두 만족하고 CPU를 기다리는 상태 입니다.</li>
+<li>Blocked (wait, sleep)<br>CPU를 주어도 당장 instruction을 수행할 수 없는 상태입니다. 프로세스 자신이 요청한 event(io같은거) 가 만족되지않아 이를 기다리는 상태입니다. 자신이 요청한 event 만족되면 ready 상태가 됩니다.</li>
+<li>New<br>프로세스가 생성중인 상태입니다.</li>
+<li>Terminated<br>execution이 끝난 상태입니다.</li>
+<li>Suspended (stopped)<br>프로세스가 통째로 메모리에서 쫓겨난 상태입니다. 디스크에 swap out 됩니다.  외부에서 resume해 주어야 active가 됩니다.</li>
+</ol>
+<p><img src="/image/100202.png"></p>
+<p><img src="/image/100203.png"></p></div><a class="article-more button is-small is-size-7" href="/2018/10/03/Process/#more">Read more</a></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/28/">Previous</a></div><div class="pagination-next"><a href="/page/30/">Next</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/28/">28</a></li><li><a class="pagination-link is-current" href="/page/29/">29</a></li><li><a class="pagination-link" href="/page/30/">30</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/62/">62</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[빅데이터를 지탱하는 기술] 3장_빅데이터 분산처리 - Always Learning</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Always Learning"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Always Learning"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="1. 대규모 분산 처리의 프레임워크비구조화 데이터를 읽어 들여 열 지향 스토리지로 변환하는 과정에서, 데이터의 가공 및 압축을 위해 많은 컴퓨터 리소스가 소비된다.그래서 사용하는 것이 Hadoop, Spark 같은 분산 처리 프레임워크다. 구조화 데이터, 비구조화 데이터, 스키마리스 데이터 구조화 데이터스키마가 명확하게 정의된 데이터.기존의 데이터 웨어하우"><meta property="og:type" content="blog"><meta property="og:title" content="[빅데이터를 지탱하는 기술] 3장_빅데이터 분산처리"><meta property="og:url" content="https://junhee-ko.github.io/2019/12/30/big-data-chapter3/"><meta property="og:site_name" content="Always Learning"><meta property="og:description" content="1. 대규모 분산 처리의 프레임워크비구조화 데이터를 읽어 들여 열 지향 스토리지로 변환하는 과정에서, 데이터의 가공 및 압축을 위해 많은 컴퓨터 리소스가 소비된다.그래서 사용하는 것이 Hadoop, Spark 같은 분산 처리 프레임워크다. 구조화 데이터, 비구조화 데이터, 스키마리스 데이터 구조화 데이터스키마가 명확하게 정의된 데이터.기존의 데이터 웨어하우"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://junhee-ko.github.io/image/structured_data.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_hadoop.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_hive_mr.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_hive_tez.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_presto.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_spark.png"><meta property="og:image" content="https://junhee-ko.github.io/image/big_data_hive_presto.png"><meta property="article:published_time" content="2019-12-29T15:00:00.000Z"><meta property="article:modified_time" content="2021-07-17T07:08:50.857Z"><meta property="article:author" content="junhee.ko"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/structured_data.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://junhee-ko.github.io/2019/12/30/big-data-chapter3/"},"headline":"[빅데이터를 지탱하는 기술] 3장_빅데이터 분산처리","image":["https://junhee-ko.github.io/image/structured_data.png","https://junhee-ko.github.io/image/big_data_hadoop.png","https://junhee-ko.github.io/image/big_data_hive_mr.png","https://junhee-ko.github.io/image/big_data_hive_tez.png","https://junhee-ko.github.io/image/big_data_presto.png","https://junhee-ko.github.io/image/big_data_spark.png","https://junhee-ko.github.io/image/big_data_hive_presto.png"],"datePublished":"2019-12-29T15:00:00.000Z","dateModified":"2021-07-17T07:08:50.857Z","author":{"@type":"Person","name":"junhee.ko"},"publisher":{"@type":"Organization","name":"Always Learning","logo":{"@type":"ImageObject","url":"https://junhee-ko.github.io/img/logo.svg"}},"description":"1. 대규모 분산 처리의 프레임워크비구조화 데이터를 읽어 들여 열 지향 스토리지로 변환하는 과정에서, 데이터의 가공 및 압축을 위해 많은 컴퓨터 리소스가 소비된다.그래서 사용하는 것이 Hadoop, Spark 같은 분산 처리 프레임워크다. 구조화 데이터, 비구조화 데이터, 스키마리스 데이터 구조화 데이터스키마가 명확하게 정의된 데이터.기존의 데이터 웨어하우"}</script><link rel="canonical" href="https://junhee-ko.github.io/2019/12/30/big-data-chapter3/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2019-12-29T15:00:00.000Z" title="12/30/2019, 12:00:00 AM">2019-12-30</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.857Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/big-data/">Big Data</a></span></div></div><h1 class="title is-3 is-size-4-mobile">[빅데이터를 지탱하는 기술] 3장_빅데이터 분산처리</h1><div class="content"><h2 id="1-대규모-분산-처리의-프레임워크"><a href="#1-대규모-분산-처리의-프레임워크" class="headerlink" title="1. 대규모 분산 처리의 프레임워크"></a>1. 대규모 분산 처리의 프레임워크</h2><p>비구조화 데이터를 읽어 들여 열 지향 스토리지로 변환하는 과정에서, 데이터의 가공 및 압축을 위해 많은 컴퓨터 리소스가 소비된다.<br>그래서 사용하는 것이 Hadoop, Spark 같은 분산 처리 프레임워크다.</p>
+<h5 id="구조화-데이터-비구조화-데이터-스키마리스-데이터"><a href="#구조화-데이터-비구조화-데이터-스키마리스-데이터" class="headerlink" title="구조화 데이터, 비구조화 데이터, 스키마리스 데이터"></a>구조화 데이터, 비구조화 데이터, 스키마리스 데이터</h5><ol>
+<li><p>구조화 데이터<br>스키마가 명확하게 정의된 데이터.<br>기존의 데이터 웨어하우스에서는 항상 구조화 데이터로 축적하는 것이 일반적이었다.</p>
+</li>
+<li><p>비구조화 데이터<br>스키마가 없는 데이터.<br>이 상태로는 SQL 로 제대로 집계할 수 없다.</p>
+</li>
+<li><p>스키마리스 데이터<br>CSV, JSON, XML 등의 데이터는 서식은 정해져 있지만, 칼럼 수나 데이터 형은 명확하지 않다.</p>
+</li>
+</ol>
+<h5 id="데이터-구조화의-파이프라인"><a href="#데이터-구조화의-파이프라인" class="headerlink" title="데이터 구조화의 파이프라인"></a>데이터 구조화의 파이프라인</h5><p><img src="/image/structured_data.png"></p>
+<p>분산 스토리지에 수집된 데이터는 명확한 스키마를 갖지 않아 그대로는 SQL 로 집계할 수 없다.<br>그래서, 먼저 스키마를 명확하게 한 테이블 형식으로 변환해야한다.<br>구조화된 데이터는 데이터 압축률을 높이기 위해 열 지향 스토리지에 저장한다. </p>
+<h5 id="열-지향-스토리지의-작성"><a href="#열-지향-스토리지의-작성" class="headerlink" title="열 지향 스토리지의 작성"></a>열 지향 스토리지의 작성</h5><p>Hadoop 의 열 지향 스토리지는,</p>
+<ol>
+<li><p>Apache ORC<br>처음에 스키마를 정한 후 데이터를 저장</p>
+</li>
+<li><p>Apache Parquet<br>스키마리스에 가까운 데이터 구조로 되어 있어서 JSON 같은 데이터도 그대로 저장</p>
+</li>
+</ol>
+<h5 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h5><p><img src="/image/big_data_hadoop.png"></p>
+<p>단일 소프트웨어가 아니라 분산 시스템을 구성하는 다수의 소프트웨어로 이루어진 집합체이다.<br>기본 구성 요소는,</p>
+<ol>
+<li><p>분산 파일 시스템<br>HDFS.<br>다수의 컴퓨터에 파일을 복사하여 중복성을 높이는 특징이 있다.</p>
+</li>
+<li><p>리소스 관리자<br>YARN, Mesos.<br>YARN 은 애플리케이션이 사용하는 CPU 코어와 메모리를 컨테이너라는 단위로 관리한다.<br>Hadoop 에서 분산 애플리케이션을 실행하면 YARN 이 클러스터 전체의 부하를 보고 비어 있는 호스트부터 컨테이너를 할당한다.<br>어느 애플리케이션에 얼마만큼의 리소스를 할당할 지 관리해서 모든 애플리케이션이 실행되도록 제어한다.</p>
+</li>
+<li><p>분산 데이터 처리<br>MapReduce, Tez.<br>MapReduce 도 YARN 위에서 동작하는 분산 애플리케이션 중 하나이다.</p>
+</li>
+</ol>
+<h5 id="쿼리-엔진"><a href="#쿼리-엔진" class="headerlink" title="쿼리 엔진"></a>쿼리 엔진</h5><p><img src="/image/big_data_hive_mr.png"></p>
+<p>하둡에서는 다수의 쿼리 엔진이 개발되었다. 총칭해서 SQL-on-Hadoop 이라고 한다.<br>SQL 등의 쿼리 언어에 의한 데이터 집계가 목적이면, 이를 위해 설계된 쿼리 엔진을 사용한다.<br>Apache Hive 가 대표적이다. 쿼리를 자동으로 MapReduce 프로그램으로 변환하는 소프트웨어이다.<br>시간이 걸리는 배치 처리에는 적합하나, 애드 혹 쿼리를 여러 번 실행하는데는 부적합하다.<br>왜냐하면 위 그림처럼, 스테이지가 바뀔 때 대기 시간이 있기 때문이다.</p>
+<p><img src="/image/big_data_hive_tez.png"></p>
+<p>Apache Tez 는 Hive 를 가속화하기 위해 개발되었다. 기존의 MapReduce 를 대체할 목적이다.<br>Hive on MR 은, 1회의 MapReduce 스테이지가 끝날 때까지 다음의 처리를 진행할 수 없다.<br>Hive on Tez 는, 위 그림처럼 스테이지의 종료를 기다리지 않고 데이터를 차례대로 후속 처리에 전달하여 쿼리 전체 실행 시간을 단축한다.</p>
+<h5 id="대화형-쿼리엔진"><a href="#대화형-쿼리엔진" class="headerlink" title="대화형 쿼리엔진"></a>대화형 쿼리엔진</h5><p><img src="/image/big_data_presto.png"></p>
+<p>Apache Impala 와 Presto 가 대표적이다.<br>YARN 과 같은 리소스 관리자를 사용하지 않고, SQL 의 실행만으로 분산처리를 구현한다.<br>순간 최대 속도를 높이기 위해 모든 오버 헤드가 제거되어, 사용할 수 있는 리소스를 최대한 활용하여 쿼리를 실행한다.</p>
+<h5 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h5><p><img src="/image/big_data_spark.png"></p>
+<p>MapReduce, Tez 모두 데이터 처리 과정에서 만들어진 중간 데이터를 디스크에 기록한다.<br>Spark 는 대량의 메모리를 활용하여 고속화를 실현한다.<br>Hadoop 을 대체하는 것이 아니라, MapReduce 를 대체하는 존재다.</p>
+<h2 id="2-쿼리-엔진"><a href="#2-쿼리-엔진" class="headerlink" title="2. 쿼리 엔진"></a>2. 쿼리 엔진</h2><p><img src="/image/big_data_hive_presto.png"></p>
+<h5 id="데이터-마트-구축의-파이프라인"><a href="#데이터-마트-구축의-파이프라인" class="headerlink" title="데이터 마트 구축의 파이프라인"></a>데이터 마트 구축의 파이프라인</h5><ol>
+<li><p>Hive<br>분산 스토리지에 저장된 데이터를 구조화하고 열 지향 스토리지 형식으로 저장</p>
+</li>
+<li><p>Presto<br>완성한 구조화 데이터를 결합, 집계하고 비정규화 테이블로 만든 데이터 마트에 써서 보냄</p>
+</li>
+</ol>
+<h5 id="Hive-에-의한-구조화-데이터-작성"><a href="#Hive-에-의한-구조화-데이터-작성" class="headerlink" title="Hive 에 의한 구조화 데이터 작성"></a>Hive 에 의한 구조화 데이터 작성</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive<span class="operator">&gt;</span> <span class="keyword">CREATE</span> <span class="keyword">EXTERNAL</span> <span class="keyword">TABLE</span> access_log_csv (...)</span><br></pre></td></tr></table></figure>
+
+<p>CSV 파일을 읽어들여 외부 테이블을 정의한다.<br>외부테이블이란, Hive 의 외부에 있는 특정 파일을 참고해 마치 거기에 테이블이 존재하는 것처럼 읽어 들이기 위해 지정한다.<br>쿼리를 실행할 때마다 매번 텍스트를 읽어들이기 때문에 느리다. 그래서 열 지향 스토리지로 변환해야한다.</p>
+<h5 id="열-지향-스토리지로의-변환"><a href="#열-지향-스토리지로의-변환" class="headerlink" title="열 지향 스토리지로의 변환"></a>열 지향 스토리지로의 변환</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive<span class="operator">&gt;</span> <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> access_log_orc STROED <span class="keyword">as</span> ORC <span class="keyword">as</span> <span class="keyword">SELECT</span> ..</span><br></pre></td></tr></table></figure>
+
+<p>텍스트 데이터를 열 지향 스토리지로 변환함으로써 데이터의 집계가 크게 고속화된다.</p>
+<h5 id="Hive-로-비정규화-테이블-작성하기"><a href="#Hive-로-비정규화-테이블-작성하기" class="headerlink" title="Hive 로 비정규화 테이블 작성하기"></a>Hive 로 비정규화 테이블 작성하기</h5><p>데이터 구조화가 완료되면 데이터 마트를 구축해야한다. 즉, 테이블을 결합 및 집약해서 ‘비정규화 테이블’ 을 만든다.<br>Preso 와 같은 대화형 쿼리 엔진, Hive 같은 배치형 쿼리 엔진을 사용할 수 있다. 시간이 걸리는 배치 처리는 Hive 를 사용해야한다.<br>비정규화 테이블을 만드는 데 오랜 시간이 걸리므로, 가능한 효율적인 쿼리를 작성해야한다. </p>
+<ol>
+<li><p>서브 쿼리 안에서 레코드 수 줄이기<br>서브 쿼리 안에서 팩트 테이블을 작게 해야한다.<br>데이터의 양의 감소 시킨 후에 테이블을 결합하는 것이 쿼리 실행 시간을 단축시킨다.</p>
+</li>
+<li><p>데이터 편향 피하기<br>분산 시스템의 성능을 발휘하기 위해서, 모든 노드에 데이터가 균등하게 분산되도록 해야한다.</p>
+</li>
+</ol>
+<h5 id="대화형-쿼리-엔진-Presto-구조"><a href="#대화형-쿼리-엔진-Presto-구조" class="headerlink" title="대화형 쿼리 엔진 Presto 구조"></a>대화형 쿼리 엔진 Presto 구조</h5><p>쿼리 실행의 지연을 감소시키는 목적으로 개발된 것이 대화형 쿼리 엔진이다.<br>Presto 의 특징은,</p>
+<ol>
+<li><p>플러그인 가능한 스토리지<br>다양한 데이터 소스를 테이블로 참고할 수 있다.<br>ex) 하나의 쿼리 안에서 분산 스토리지 상의 팩트 테이블과 MySQL 의 마스터 테이블을 조인할 있다.</p>
+</li>
+<li><p>CPU 처리의 최적화<br>코드의 실행을 멀티 스레드화되어 단일 머신에서 수백 태스크나 병렬로 실행된다.<br>그래서, CPU 이용 효율이 높다.</p>
+</li>
+<li><p>인 메모리 처리에 의한 고속화<br>모든 데이터 처리는 메모리 상에서 실시하고 메모리가 부족하면 여유가 생길 때까지 기다리거나 오류로 실패한다.</p>
+</li>
+</ol>
+<h5 id="데이터-분석의-프레임워크-선택하기"><a href="#데이터-분석의-프레임워크-선택하기" class="headerlink" title="데이터 분석의 프레임워크 선택하기"></a>데이터 분석의 프레임워크 선택하기</h5><ol>
+<li><p>MPP Database<br>비정규화 테이블을 고속으로 집계하는 데에 최적</p>
+</li>
+<li><p>Hive<br>데이터 양에 좌우되지 않는 쿼리 엔진</p>
+</li>
+<li><p>Presto<br>속도 중시, 대화식으로 특화된 쿼리 엔진</p>
+</li>
+<li><p>Spark<br>분산 시스템을 사용한 프로그래밍 환경.<br>ETL 프로세스에서 SQL 에 이르기 까지의 일련의 흐름을 하나의 데이터 파이프라인으로 기술 가능.</p>
+</li>
+</ol>
+<h2 id="3-데이터-마트의-구축"><a href="#3-데이터-마트의-구축" class="headerlink" title="3. 데이터 마트의 구축"></a>3. 데이터 마트의 구축</h2><p>분산 시스템이 준비되면 시각화를 위해 데이터 마트를 만든다.</p>
+<h5 id="팩트-테이블"><a href="#팩트-테이블" class="headerlink" title="팩트 테이블"></a>팩트 테이블</h5><p>팩트 테이블 작성 방법으로,</p>
+<ol>
+<li><p>추가<br>새로 도착한 데이터만을 증분으로 추가</p>
+</li>
+<li><p>치환<br>과거 데이터를 포함하여 테이블 전체 치환</p>
+</li>
+</ol>
+<h5 id="테이블-파티셔닝"><a href="#테이블-파티셔닝" class="headerlink" title="테이블 파티셔닝"></a>테이블 파티셔닝</h5><p>위의 ‘추가’ 방법은 다음 문제가 있다.</p>
+<ol>
+<li>추가에 실패한것을 알아채지 못하면, 팩트 테이블의 일부에 결손</li>
+<li>추가를 잘못해서 여러번 실행하면, 일부 중복</li>
+<li>나중에 팩트 테이블 다시 만들고 싶으면, 관리 복잡</li>
+</ol>
+<p>그래서 파티셔닝이 필요하다.<br>하나의 테이블을 여러 물리적인 파티션으로 나눠서 파티션 단위로 정리하여 데이터를 쓰거나 삭제하는 것이다.</p>
+<h5 id="집계-테이블"><a href="#집계-테이블" class="headerlink" title="집계 테이블"></a>집계 테이블</h5><p>팩트 테이블을 어느 정도 모아서 집계하면 데이터의 양이 줄어든다. 이것은 집계 테이블이라고 한다.<br>각 칼럼이 취하는 값의 범위란, 카디널리티이다. ‘성별’ 과 같이 취할 수 있는 값이 적은 것은 카디널리티가 작은 것이다.<br>집계 테이블을 작게 하려면 모든 칼럼의 카디널리티를 줄여야한다.</p>
+<h5 id="스냅샷-테이블-이력-테이블"><a href="#스냅샷-테이블-이력-테이블" class="headerlink" title="스냅샷 테이블, 이력 테이블"></a>스냅샷 테이블, 이력 테이블</h5><p>마스터 데이터처럼 업데이트 될 가능성이 있는 테이블은,<br>정기적으로 테이블을 통째로 저장하는 스탭샷 테이블, 또는 변경 내용만을 저장하는 이력 테이블로 관리할 수 있다.</p>
+<h5 id="디멘전을-추가하여-비정규화-테이블-완성시키기"><a href="#디멘전을-추가하여-비정규화-테이블-완성시키기" class="headerlink" title="디멘전을 추가하여 비정규화 테이블 완성시키기"></a>디멘전을 추가하여 비정규화 테이블 완성시키기</h5><p>팩트 테이블과 디멘젼 테이블을 결합하여 비정규화 테이블을 만든다.</p>
+<hr>
+<p>빅데이터를 지탱하는 기술 &lt;니시다 케이스케&gt;</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[빅데이터를 지탱하는 기술] 3장_빅데이터 분산처리</p><p><a href="https://junhee-ko.github.io/2019/12/30/big-data-chapter3/">https://junhee-ko.github.io/2019/12/30/big-data-chapter3/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>junhee.ko</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2019-12-30</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-07-17</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2019/12/30/big-data-chapter2/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[빅데이터를 지탱하는 기술] 2장_빅데이터 탐색</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2019/12/29/kafka-chapter5/"><span class="level-item">[카프카] 5장_카프카 컨슈머</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><p class="title is-size-4 is-block" style="line-height:inherit;">Junhee Ko</p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">308</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/junhee-ko" target="_blank" rel="noopener">Follow</a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/algorithm/"><span class="level-start"><span class="level-item">Algorithm</span></span><span class="level-end"><span class="level-item tag">180</span></span></a></li><li><a class="level is-mobile" href="/categories/big-data/"><span class="level-start"><span class="level-item">Big Data</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/container/"><span class="level-start"><span class="level-item">Container</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/git/"><span class="level-start"><span class="level-item">Git</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/jpa/"><span class="level-start"><span class="level-item">JPA</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/oauth/"><span class="level-start"><span class="level-item">OAuth</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/oop/"><span class="level-start"><span class="level-item">OOP</span></span><span class="level-end"><span class="level-item tag">18</span></span></a></li><li><a class="level is-mobile" href="/categories/os/"><span class="level-start"><span class="level-item">OS</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/categories/redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/spark/"><span class="level-start"><span class="level-item">Spark</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/spring/"><span class="level-start"><span class="level-item">Spring</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/tdd/"><span class="level-start"><span class="level-item">TDD</span></span><span class="level-end"><span class="level-item tag">32</span></span></a></li><li><a class="level is-mobile" href="/categories/test-code/"><span class="level-start"><span class="level-item">Test Code</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/grpc/"><span class="level-start"><span class="level-item">gRPC</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Always Learning" height="28"></a><p class="is-size-7"><span>&copy; 2021 junhee.ko</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
