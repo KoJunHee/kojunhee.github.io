@@ -14,7 +14,7 @@
 
 <p>코틀린에서는 위와 같이,<br>클래스 이름 뒤에 콜론을 붙여서 클래스 확장과 인터페이스 구현을 모두 처리한다.</p>
 <p>그리고, override 변경자를 반드시 사용해야한다.<br>이는, 실수로 상위 클래스의 메서드를 오버라이드하는 경우를 방지한다.</p>
-<p>인터페이스 메서드도 디폴트 구현을 제공할 수 있다.<br>자바처럼 default 키워드를 붙일 필요는 없다.</p></div><a class="article-more button is-small is-size-7" href="/2021/08/07/kotlin-class/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-08-06T15:00:00.000Z" title="8/7/2021, 12:00:00 AM">2021-08-07</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-08-08T07:49:22.659Z" title="8/8/2021, 4:49:22 PM">2021-08-08</time></span><span class="level-item"><a class="link-muted" href="/categories/kotlin/">Kotlin</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/08/07/kotlin-constructor/">생성자</a></h1><div class="content"><p>다음 내용을 정리한다.</p>
+<p>인터페이스 메서드도 디폴트 구현을 제공할 수 있다.<br>자바처럼 default 키워드를 붙일 필요는 없다.</p></div><a class="article-more button is-small is-size-7" href="/2021/08/07/kotlin-class/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-08-06T15:00:00.000Z" title="8/7/2021, 12:00:00 AM">2021-08-07</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-08-08T08:33:47.274Z" title="8/8/2021, 5:33:47 PM">2021-08-08</time></span><span class="level-item"><a class="link-muted" href="/categories/kotlin/">Kotlin</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/08/07/kotlin-constructor/">생성자</a></h1><div class="content"><p>다음 내용을 정리한다.</p>
 <ul>
 <li>주 생성자, 부 생성자</li>
 <li>초기화 블록</li>
@@ -26,7 +26,7 @@
 <p>같은 목적을 이룰 수 있는 다은 형태의 코드를 보자.</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">constructor</span></span>(_nickname: String) &#123;</span><br><span class="line">    <span class="keyword">val</span> nickname: String</span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        nickname = _nickname <span class="comment">// _ : 프로퍼티와 생성자 파라미터를 구분하기 위해 사용</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>constructor 키워드는, 주 생성자나 부 생성자를 정의할 때 사용한다.<br>init 키워드는, 초기화 블록을 시작한다. 초기화 블록은, 클래스의 객체가 만들어질때 실행된다.</p>
+<p>constructor 키워드는, 주 생성자나 부 생성자를 정의할 때 사용한다.<br>init 키워드는, 초기화 블록을 시작한다. 초기화 블록은, 클래스의 객체가 만들어질 때 실행된다.</p>
 <p>위 코드에서,</p>
 <ol>
 <li>nickname 프로퍼티를 초기화 하는 코드를, nickname 프로퍼티 선언에 포함 가능</li>
