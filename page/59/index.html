@@ -9,7 +9,20 @@
 </li>
 </ol>
 <p><img src="http://cfile10.uf.tistory.com/image/99B47E3359DE3510229328" alt="img"></p>
-</div><a class="article-more button is-small is-size-7" href="/2017/10/11/%EC%9D%B4%EC%A7%84%EC%88%98/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2017-10-07T15:00:00.000Z" title="10/8/2017, 12:00:00 AM">2017-10-08</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.815Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%982/">11005:진법변환2</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/11005">https://www.acmicpc.net/problem/11005</a></p>
+</div><a class="article-more button is-small is-size-7" href="/2017/10/11/%EC%9D%B4%EC%A7%84%EC%88%98/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2017-10-07T15:00:00.000Z" title="10/8/2017, 12:00:00 AM">2017-10-08</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.837Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%98/">2745:진법변환</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/1912">https://www.acmicpc.net/problem/1912</a></p>
+<h2 id="틀린-풀이"><a href="#틀린-풀이" class="headerlink" title="틀린 풀이"></a>틀린 풀이</h2><ol>
+<li><p>수학에서 진법 변확 하는 방식으로 풀면 됨</p>
+</li>
+<li><p>수는 string 으로 , 진법은 int 로 입력 받음<br>(string으로 받아 각 자리에 접근하고, 자릿수를 쉽게 파악하기 위해)</p>
+</li>
+<li><p>각 자리 수에 접근하여 int로 입력받은 수의 자릿수 제곱을 곱하여 </p>
+</li>
+<li><p>더함</p>
+</li>
+</ol>
+<p><img src="http://cfile29.uf.tistory.com/image/99F8273359DA31220B49CF" alt="img"></p>
+<h2 id="맞는-풀이"><a href="#맞는-풀이" class="headerlink" title="맞는 풀이"></a>맞는 풀이</h2><p><img src="http://cfile26.uf.tistory.com/image/99B3C33359DA36C51E06C7" alt="img"></p>
+</div><a class="article-more button is-small is-size-7" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%98/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2017-10-07T15:00:00.000Z" title="10/8/2017, 12:00:00 AM">2017-10-08</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.815Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%982/">11005:진법변환2</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/11005">https://www.acmicpc.net/problem/11005</a></p>
 <h2 id="풀이"><a href="#풀이" class="headerlink" title="풀이"></a>풀이</h2><ol>
 <li><p>몇 번 나누는지 count</p>
 </li>
@@ -30,20 +43,7 @@
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder ans = new StringBuilder();</span><br><span class="line">        while (n &gt; 0) &#123;</span><br><span class="line">            int r = n % b;</span><br><span class="line">            if (r &lt; 10) &#123;</span><br><span class="line">                ans.append((char)(r + &#x27;0&#x27;));</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                ans.append((char)(r - 10 + &#x27;A&#x27;));</span><br><span class="line">            &#125;</span><br><span class="line">            n /= b;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(ans.reverse());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-</div><a class="article-more button is-small is-size-7" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%982/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2017-10-07T15:00:00.000Z" title="10/8/2017, 12:00:00 AM">2017-10-08</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.837Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%98/">2745:진법변환</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/1912">https://www.acmicpc.net/problem/1912</a></p>
-<h2 id="틀린-풀이"><a href="#틀린-풀이" class="headerlink" title="틀린 풀이"></a>틀린 풀이</h2><ol>
-<li><p>수학에서 진법 변확 하는 방식으로 풀면 됨</p>
-</li>
-<li><p>수는 string 으로 , 진법은 int 로 입력 받음<br>(string으로 받아 각 자리에 접근하고, 자릿수를 쉽게 파악하기 위해)</p>
-</li>
-<li><p>각 자리 수에 접근하여 int로 입력받은 수의 자릿수 제곱을 곱하여 </p>
-</li>
-<li><p>더함</p>
-</li>
-</ol>
-<p><img src="http://cfile29.uf.tistory.com/image/99F8273359DA31220B49CF" alt="img"></p>
-<h2 id="맞는-풀이"><a href="#맞는-풀이" class="headerlink" title="맞는 풀이"></a>맞는 풀이</h2><p><img src="http://cfile26.uf.tistory.com/image/99B3C33359DA36C51E06C7" alt="img"></p>
-</div><a class="article-more button is-small is-size-7" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%98/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2017-10-05T15:00:00.000Z" title="10/6/2017, 12:00:00 AM">2017-10-06</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.832Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/10/06/GCD%ED%95%A9/">9613:GCD합</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/9613">https://www.acmicpc.net/problem/9613</a></p>
+</div><a class="article-more button is-small is-size-7" href="/2017/10/08/%EC%A7%84%EB%B2%95%EB%B3%80%ED%99%982/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2017-10-05T15:00:00.000Z" title="10/6/2017, 12:00:00 AM">2017-10-06</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.832Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/algorithm/">Algorithm</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/10/06/GCD%ED%95%A9/">9613:GCD합</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/9613">https://www.acmicpc.net/problem/9613</a></p>
 <h2 id="풀이"><a href="#풀이" class="headerlink" title="풀이"></a>풀이</h2><ol>
 <li><p>GCD 구하는 함수를 만든다</p>
 </li>
