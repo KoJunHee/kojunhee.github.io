@@ -9,66 +9,25 @@
 <p>그리고 아래 명령어로, 컨테이너를 생성한다.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-comose up -d</span><br></pre></td></tr></table></figure>
 
-<h2 id="도커-컴포즈-구성-단위"><a href="#도커-컴포즈-구성-단위" class="headerlink" title="도커 컴포즈 구성 단위"></a>도커 컴포즈 구성 단위</h2></div><a class="article-more button is-small is-size-7" href="/2020/12/09/docker-compose/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-12-04T15:00:00.000Z" title="12/5/2020, 12:00:00 AM">2020-12-05</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.834Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/container/">Container</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/05/docker-engine/">[도커/쿠버네티스] 2장_도커 엔진</a></h1><div class="content"><h2 id="도커-이미지와-컨테이너"><a href="#도커-이미지와-컨테이너" class="headerlink" title="도커 이미지와 컨테이너"></a>도커 이미지와 컨테이너</h2><p><img src="/image/docker-container.png"></p>
-<ol>
-<li>도커 이미지<br>여러 개의 계층으로 된 바이너리 파일로 존재하고, 컨테이너를 생성하고 실행할 때 읽기 전용으로 사용된다.<br>이미지 이름은, 다음과 같은 형태로 구성된다 : [저장소 이름]/[이미지 이름]:[태그]<br>ex) jko/ubuntu:14.04</li>
-<li>도커 컨테이너<br>이미지로 컨테이너를 생성하면, 이미지 목적에 맞는 파일이 들어 있는 파일 시스템과, 격리된 시스템 자원 및 네트워크를 사용할 수 있는 독립된 공간이 생성된다.<br>이것이 도커 컨테이너이다.<br>컨테이너는 이미지를 읽기 전용으로 사용하되 이미지에서 변경된 사항만 컨테이너 계층에 저장하기때문에, 컨테이너에 무엇을 하든지 원래 이미지는 영향을 받지 않는다.<br>또한, 컨테이너는 호스트와 분리되어있기 때문에, 어떤 애플리케이션을 설치하거나 삭제해도 다른 컨테이너와 호스트는 변화가 없다.</li>
-</ol>
-<h2 id="도커-컨테이너-다루기"><a href="#도커-컨테이너-다루기" class="headerlink" title="도커 컨테이너 다루기"></a>도커 컨테이너 다루기</h2><ol>
-<li><p>컨테이너 생성</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -i -t ubuntu:14.04</span><br></pre></td></tr></table></figure>
-
-<p>docker run 명령어는 컨테이너를 생성하고 실행한다.<br>-i -t 는 컨테이너와 interactive 입출력을 가능하게 한다.</p>
-</li>
-<li><p>컨테이너 목록 확인</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure></li>
-<li><p>컨테이너 삭제</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm mycentos</span><br></pre></td></tr></table></figure>
-
-<p>컨테이너의 이름은 생성한 컨테이너의 이름에 맞게.</p>
-</li>
-<li><p>컨테이너를 외부에 노출</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -i -t --name mywebserver -p 80:80 ubuntu:14.04</span><br></pre></td></tr></table></figure>
-
-<p>컨테이너는 가상 머신처럼, 가상 IP 주소를 할당 받는다.<br>-p 옵션은 컨테이너의 포트를 호스트의 포트와 바인딩한다. ( 호스트의 포트:컨테이너의 포트 )</p>
-</li>
-<li><p>컨테이너 애플리케이션 구축<br>여러 애플리케이션을 한 컨테이너에 설치할 수 있다.<br>하지만, 컨테이너에 애플리케이션을 하나만 동작시키면 컨테이너 간 독립성을 보장하고 애플리케이션의 버전 관리와 소스 코드 모듈화가 쉬워진다.</p>
-</li>
-<li><p>도커 볼륨</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">--name testvolume \</span><br><span class="line">--e MYSQL_PWD=password \</span><br><span class="line">--e MYSQL_DATABASE=db \</span><br><span class="line">-v /home/test_db:/var/lib/mysql \</span><br><span class="line">mysql:5.7</span><br></pre></td></tr></table></figure>
-
-<p>mysql 컨테이너를 삭제하면, 컨테이너 계층에 저장되어 있던 DB 정보도 삭제된다.<br>이를 방지하기 위해, 컨테이너의 데이터를 영속적으로 활용할 수 있는 방법이 볼륨을 활용하는 것이다.<br>위 명령어는, 호스트의 /home/test_db 디렉터리와 컨테이너의 /var/lib/mysql 디렉토리를 공유한다는 의미이다.</p>
-</li>
-</ol>
-<h2 id="도커-이미지"><a href="#도커-이미지" class="headerlink" title="도커 이미지"></a>도커 이미지</h2><p>도커는 Docker Hub 이라는 중앙 이미지 저장소에서 이미지를 내려받는다.<br>대부분의 이미지는 도커 허브에서 공식적으로 제공하거나 (ex. ubuntu:14.04, centos:7) 다른 사람이 도커 허브에 올려놓은 경우가 대부분이다.<br>도커 허브에서 어떤 이미지가 있는지 확인하기 위해, 도커 허브 사이트를 직접 접속해서 찾아보거나 아래와 같이 도커 엔진에서 찾을 수 있다.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search ubuntu</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p>이미지 생성<br>다음 명령어로 이미지로 만들 컨테이너를 생성하고, 기존의 이미지로부터 변경 사항을 만들자.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -i -i --name commit_test ubuntu:14.04</span><br><span class="line"><span class="built_in">echo</span> test_first!! &gt;&gt; first</span><br></pre></td></tr></table></figure>
-
-<p>그리고, 호스트로 빠져나와 아래 명령어로 컨테이너를 이미지로 만들자.<br>commit_test 라는 컨테이너를 commit_test:first 라는 이름의 이미지로 생성한다.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker commit \</span><br><span class="line">-a <span class="string">&#x27;test_author&#x27;</span> -m <span class="string">&#x27;commit_message&#x27;</span> \</span><br><span class="line">commit_test \</span><br><span class="line">commit_test:first</span><br></pre></td></tr></table></figure></li>
-<li><p>이미지 구조<br>이미지를 커밋할 때, 컨테이너에서 변경된 사항만 새로운 레이어로 저장하고, 그 레이어를 새로운 이미지로 생성한다.</p>
-</li>
-<li><p>이미지 추출</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save -o ubuntu_14.04.tar ubuntu:14.04</span><br></pre></td></tr></table></figure>
-
-<p>도커 이미지를 별도로 저장하거나 옮기는 등 필요에 따라 이미지를 단일 바이너리 파일로 저장해야할 때 필요하다.<br>-o 옵션에는 추출될 파일명을 입력한다.</p>
-</li>
-</ol>
-<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2></div><a class="article-more button is-small is-size-7" href="/2020/12/05/docker-engine/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-12-03T15:00:00.000Z" title="12/4/2020, 12:00:00 AM">2020-12-04</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.833Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/container/">Container</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/04/what-is-docker/">[도커/쿠버네티스] 1장_도커란?</a></h1><div class="content"><h2 id="가상-머신과-도커-컨테이너"><a href="#가상-머신과-도커-컨테이너" class="headerlink" title="가상 머신과 도커 컨테이너"></a>가상 머신과 도커 컨테이너</h2><p><img src="/image/virtual-docker.png"></p>
-<ol>
-<li>가상 머신<br>기존의 가상화 기술은, 하이퍼바이저를 이용해 여러 개의 운영체제 (= Guest OS) 를 하나의 호스트에서 생성해 사용하는 방식이었다. 각 Guest OS 는 다른 Guest OS 와 완전히 독립된 공간과 시스템 자원을 할당받아 사용한다.<br>시스템 자원 가상화하고 독립된 공간 생성 작업은 항상 하이퍼바이저를 거치기 때문에 일반 호스트에 비해 성능 손실이 발생한다.<br>그리고, Guest OS 를 사용하기 위한 라이브러리, 커널 등을 전부 포함하여 가상 머신을 배포하기 위한 이미지를 만들었을 때 크기가 크다. </li>
-<li>도커 컨테이너<br>도커 컨테이너는, 가상화된 공간을 생성하기 위해 리눅스의 자체 기능은 chroot, namespace, cgroup 을 사용하여 프로세스 단위로 격리된 환경을 만든다.<br>컨테이너에 필요한 커널은 호스트의 커널을 공유해 사용하고, 컨테이너 안에는 애플리케이셔을 구동하기 위한 라이브러리 및 실행파일만 존재하여 이미지로 만들었을 때 크기가 작다.</li>
-</ol>
-<h2 id="도커의-장점"><a href="#도커의-장점" class="headerlink" title="도커의 장점"></a>도커의 장점</h2><ol>
-<li>애플리케이션의 개발과 배포가 편해진다.<br><code>독립된 개발환경</code><br>도커 컨테이너는 호스트 OS 위에서 실행되는 격리된 공간이기 때문에, 컨테이너 내부에서 수많은 소프트웨어를 설치하고 설정 파일을 수정해도 호스트 OS 에는 영향을 끼치지 않는다.<br><code>개발/운영환경의 통합</code><br>컨테이너 내부에서 작업을 마친 뒤 운영 환경에 배포하려고 하면, 해당 컨테이너를 ‘도커 이미지’ 라는 패키지로 만들어 운영서버어 전달만 하면 된다.<br><code>빠른 배포</code><br>도커 이미지는 가상 머신의 이미지와 다르게 커널을 포함하고 있지 않기 때문에 이미지 크기가 작다.</li>
-<li>여러 애플리케이션의 독립성과 확장성이 높아진다.<br><code>마이크로서비스에 적합</code><br>컨테이너는 수 초 내로 생성과 시작이 가능하고 여러 모듈에 독립된 환경을 동시에 제공하기 때문에.</li>
-</ol>
-<hr>
-<p>시작하세요! 도커/쿠버네티스 &lt;용찬호&gt;</p>
-</div><a class="article-more button is-small is-size-7" href="/2020/12/04/what-is-docker/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-08-31T15:00:00.000Z" title="9/1/2020, 12:00:00 AM">2020-09-01</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.814Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/java/">Java</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/01/collection-framework-tree-set/">Collection Framework - TreeSet</a></h1><div class="content"><p>Collection Framework 의 인터페이스 구조는 다음과 같다.</p>
+<h2 id="도커-컴포즈-구성-단위"><a href="#도커-컴포즈-구성-단위" class="headerlink" title="도커 컴포즈 구성 단위"></a>도커 컴포즈 구성 단위</h2></div><a class="article-more button is-small is-size-7" href="/2020/12/09/docker-compose/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-12-04T15:00:00.000Z" title="12/5/2020, 12:00:00 AM">2020-12-05</time></span><span class="level-item">Updated&nbsp;<time dateTime="2023-04-02T07:45:52.469Z" title="4/2/2023, 4:45:52 PM">2023-04-02</time></span><span class="level-item"><a class="link-muted" href="/categories/container/">Container</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/05/docker-engine/">도커 엔진</a></h1><div class="content"><h2 id="도커-이미지와-컨테이너"><a href="#도커-이미지와-컨테이너" class="headerlink" title="도커 이미지와 컨테이너"></a>도커 이미지와 컨테이너</h2><p>도커 엔진에서 사용하는 기본 단위와 핵심은 이미지와 컨테이너이다.</p>
+<h3 id="도커-이미지"><a href="#도커-이미지" class="headerlink" title="도커 이미지"></a>도커 이미지</h3><p>이미지는 컨테이너를 생성할 때 필요한 요소이다. 가상 머신을 생성할 때 사용되는 iso 파일과 비슷하다.<br>이미지는 여러 개의 계층으로 된 바이너리 파일로 존재하고, 컨테이너를 생성하고 실행할 때 읽기 전용으로 사용된다.</p>
+<p>이미지 이름은, 다음과 같은 형태로 구성된다 : [저장소 이름]/[이미지 이름]:[태그]<br>ex) jko/ubuntu:14.04</p>
+<h3 id="도커-컨테이너"><a href="#도커-컨테이너" class="headerlink" title="도커 컨테이너"></a>도커 컨테이너</h3><p><img src="/image/docker-container.png"></p>
+<p>이미지로 컨테이너를 생성하면, 이미지 목적에 맞는 파일이 들어 있는 파일 시스템과, 격리된 시스템 자원 및 네트워크를 사용할 수 있는 독립된 공간이 생성된다.</p>
+<p>컨테이너는 이미지를 읽기 전용으로 사용하되 이미지에서 변경된 사항만 컨테이너 계층에 저장하기때문에, 컨테이너에 무엇을 하든지 원래 이미지는 영향을 받지 않는다.<br>또한, 컨테이너는 호스트와 분리되어있기 때문에, 어떤 애플리케이션을 설치하거나 삭제해도 다른 컨테이너와 호스트는 변화가 없다.</p>
+<p>예를 들어,</p></div><a class="article-more button is-small is-size-7" href="/2020/12/05/docker-engine/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-12-03T15:00:00.000Z" title="12/4/2020, 12:00:00 AM">2020-12-04</time></span><span class="level-item">Updated&nbsp;<time dateTime="2023-04-02T06:29:45.951Z" title="4/2/2023, 3:29:45 PM">2023-04-02</time></span><span class="level-item"><a class="link-muted" href="/categories/container/">Container</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/12/04/what-is-docker/">도커란 ?</a></h1><div class="content"><h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>Docker 는 리눅스 컨테이너에 여러 기능을 추가해서 애플리케이션을 컨테이너로서 조금 더 쉽게 사용할 수 있게 만들어진 오픈소스 프로젝트이다.</p>
+<p>도커와 관련된 프로젝트에는,</p>
+<ul>
+<li>Docker Compose</li>
+<li>Private Registry</li>
+<li>Docker Hub</li>
+<li>Docker for Desktop</li>
+<li>…</li>
+</ul>
+<p>일반적으로 도커라고 하면 Docker Engine 이라는 의미로 많이 쓰인다.<br>도커의 생태계에 있는 모든 프로젝트들은 도커 엔진을 더 효율적으로 사용하기 위한 것에 불과하기 때문이다.</p>
+<h2 id="가상-머신과-도커-컨테이너"><a href="#가상-머신과-도커-컨테이너" class="headerlink" title="가상 머신과 도커 컨테이너"></a>가상 머신과 도커 컨테이너</h2><p><img src="/image/virtual-docker.png"></p>
+<h3 id="가상-머신"><a href="#가상-머신" class="headerlink" title="가상 머신"></a>가상 머신</h3><p>기존의 가상화 기술은, 하이퍼바이저를 이용해 여러 운영체제 (= Guest OS) 를 하나의 호스트에서 생성해 사용하는 방식이었다.<br>각 Guest OS 는 다른 Guest OS 와 완전히 독립된 공간과 시스템 자원을 할당받아 사용한다.<br>이러한 가상화 방식을 사용할 수 있는 가상화 툴로는 VirtualBox, VMware 등이 있다.</p>
+<p>시스템 자원을 가상화하고 독립된 공간 생성 작업은 항상 하이퍼바이저를 거치기 때문에 일반 호스트에 비해 성능 손실이 발생한다.<br>그리고, Guest OS 를 사용하기 위한 라이브러리, 커널 등을 전부 포함하여 가상 머신을 배포하기 위한 이미지를 만들었을 때 이미지의 크기가 크다.</p></div><a class="article-more button is-small is-size-7" href="/2020/12/04/what-is-docker/#more">Read more</a></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2020-08-31T15:00:00.000Z" title="9/1/2020, 12:00:00 AM">2020-09-01</time></span><span class="level-item">Updated&nbsp;<time dateTime="2021-07-17T07:08:50.814Z" title="7/17/2021, 4:08:50 PM">2021-07-17</time></span><span class="level-item"><a class="link-muted" href="/categories/java/">Java</a></span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/01/collection-framework-tree-set/">Collection Framework - TreeSet</a></h1><div class="content"><p>Collection Framework 의 인터페이스 구조는 다음과 같다.</p>
 <p><img src="/image/collectoin-01.png"></p>
 <p>여기서, Set 인터페이스를 구현하는 클래스로는 HashSet, TreeSet 이 있다.<br>TreeSet 클래스를 정리해보자.</p>
 <h2 id="1-Set-인터페이스"><a href="#1-Set-인터페이스" class="headerlink" title="1. Set 인터페이스"></a>1. Set 인터페이스</h2><p>Set 인터페이스를 구현하는 클래스는 다음 특징을 가진다.</p>
